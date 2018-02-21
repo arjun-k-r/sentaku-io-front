@@ -1,0 +1,13 @@
+#<TYPE> + titre du commit (Voir plus bas pour les types)
+
+#Explication: (explication de ce que l’on à fait comme changement )
+
+#Référence: (référence à l’issue de github)
+
+#Les type de commit:
+#<fix> Fixation d’un bug dans la feature
+#<style> Formatage du code
+#<docs> Changement concernant la documentation
+#<test> Ajout ou réécriture d’un test
+#<chore> Tâche d’administration (m.a.j des lib par exemple)
+#<merge> Merge de deux branches
