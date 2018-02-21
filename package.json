@@ -1,9 +1,9 @@
 {
   "name": "sentaku-io-front",
   "scripts": {
-    "start": "bsb -make-world  && webpack ",
+    "start": "bsb -make-world",
     "js": "bsb -make-world",
-    "build": "webpack -w",
+    "build": "webpack",
     "clean": "bsb -clean-world"
   },
   "dependencies": {
