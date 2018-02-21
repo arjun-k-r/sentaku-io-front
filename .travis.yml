@@ -6,14 +6,8 @@ install:
 before_script:
   - npm install
 script:
-<<<<<<< HEAD
-  npm run start
-after-success:
- firebase deploy --token $FIREBASE_TOKEN
-=======
   - npm start 
   - npm build 
   - echo "Deploying !"
  after-success:
  firebase deploy --token $FIREBASE_TOKEN
->>>>>>> origin/master
