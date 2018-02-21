@@ -3,11 +3,7 @@ node_js:
   "9.5.0"
 install:
   npm install -g firebase-tools
-before_script:
-  - npm install
 script:
-  - npm start 
-  - npm build 
-  - echo "Deploying !"
+  echo "Deploying !"
  after-success:
  firebase deploy --token $FIREBASE_TOKEN
