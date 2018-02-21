@@ -7,3 +7,4 @@ public/js/bundle.js
 npm-debug.log
 .DS_Store
 .bsb.lock
+firebase-debug.log
