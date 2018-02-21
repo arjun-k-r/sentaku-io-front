@@ -2,7 +2,7 @@ language: node_js
 node_js:
   "9.5.0"
 install:
-  npm install -g firebase-tools webpack bs-platform
+  npm install -g firebase-tools webpack bs-platform reason-react react bsb react-dom
 script:
   - npm start
   - echo "Deploying !"
