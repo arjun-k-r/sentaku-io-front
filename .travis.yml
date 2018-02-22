@@ -8,7 +8,7 @@ cache:
     - node_modules
 install:
   - yarn install
-  - yarn install -g firebase-tools
+  - yarn install firebase-tools
 script:
   - yarn build:bsb
   - yarn build:webpack
