@@ -6,9 +6,10 @@ cache:
   yarn: true
   directories:
     - node_modules
+before_install:
+  - 'npm i -g firebase-tools'
 install:
   - yarn install
-  - yarn add firebase-tools
 script:
   - yarn build:bsb
   - yarn build:webpack
