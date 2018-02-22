@@ -1,4 +1,4 @@
-# sentaku-io-front
+# sentaku-io-front [![Build Status](https://travis-ci.org/sentaku-io/sentaku-io-front.svg?branch=master)](https://travis-ci.org/sentaku-io/sentaku-io-front)
 
 > Responsive web application to manage trainings 💻📱
 
