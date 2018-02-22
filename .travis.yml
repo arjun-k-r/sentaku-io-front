@@ -1,11 +1,17 @@
 language: node_js
+sudo: false
 node_js:
-  "9.5.0"
+  - 9.5.0
+cache: 
+  yarn: true
+  directories:
+    - node_modules
 install:
-  npm install -g firebase-tools webpack bs-platform reason-react react bsb react-dom
+  - yarn install
+  - npm i -g firebase-tools
 script:
-  - npm start
-  - npm run build
+  - yarn build:bsb
+  - yarn build:webpack
   - echo "Deploying !"
 after-success:
-  firebase deploy --token $FIREBASE_TOKEN
+  - firebase deploy --token $FIREBASE_TOKEN
