@@ -8,11 +8,10 @@ cache:
     - node_modules
 install:
   - yarn install
-  - npm i -g firebase-tools
+  - yarn install -g firebase-tools
 script:
   - yarn build:bsb
   - yarn build:webpack
-  - echo "Deploying !"
 after-success:
   - firebase deploy --token $FIREBASE_TOKEN
   - echo "Deployed to firebase :)"
