@@ -12,6 +12,9 @@ install:
 script:
   - yarn build:bsb
   - yarn build:webpack
-after-success:
-  - firebase deploy --token $FIREBASE_TOKEN
-  - echo "Deployed to firebase :)"
+before_deploy: "echo 'Deployment to firebase :)'"
+deploy:
+  provider: firebase
+  token:
+    secure: $FIREBASE_TOKEN
+  message: "Deployed to firebase :) !"
