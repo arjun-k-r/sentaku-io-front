@@ -6,6 +6,7 @@
     "clean:bsb": "bsb -clean-world"
   },
   "dependencies": {
+    "webpack": "^3.11.0",
     "bsb": "0.0.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
@@ -13,6 +14,5 @@
   },
   "devDependencies": {
     "bs-platform": "^2.2.1",
-    "webpack": "^3.11.0"
   }
 }
