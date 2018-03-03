@@ -5,7 +5,7 @@ open Model;
  * 
  * @return List of trainings.
  */
-let getTrainings : List(training) = () => trainings;
+let getTrainings : list(training) = []; /* TODO : Tranforms this into function fetching trainings from backend */
 
 /**
  * Creates a training and returns it with its new generated id.
