@@ -5,9 +5,7 @@
   },
   "refmt": 3,
   "bs-dependencies": ["reason-react"],
-  "sources": [{
-    "dir": "src",
-    "subdirs": true
-  }]
+  "sources": "src"
+
 
 }
