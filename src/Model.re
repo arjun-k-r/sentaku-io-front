@@ -26,3 +26,5 @@ type rating = {
   comment: string,
   trainingId: int
 };
+
+let str = ReasonReact.stringToElement;

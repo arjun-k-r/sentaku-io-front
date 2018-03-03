@@ -5,3 +5,9 @@
  * US_02
  */
 open ServicesMocks;
+
+open Model;
+
+let component = ReasonReact.statelessComponent("Rating");
+
+let make = children => {...component, render: self => <div />};
