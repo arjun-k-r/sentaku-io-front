@@ -1,9 +1,26 @@
 open Model;
 
-let trainings: list(training) = [];
+/**
+ * Fetches all trainings from backend.
+ * 
+ * @return List of trainings.
+ */
+let getTrainings : List(training) = () => trainings;
 
-let initTrainings = () => trainings;
+/**
+ * Creates a training and returns it with its new generated id.
+ * 
+ * @param training The new training to create.
+ * 
+ * @return The new training with its new generated id.
+ */
+let createTraining: training => training = training => training;
 
-let createTraining: training => int = training => (-1);
-
-let rateTraining: rating => int = rating => (-1);
+/**
+ * Rates a training
+ * 
+ * @param rating The rating the user left on a training
+ * 
+ * @return The rating with its generated id 
+ */
+let rateTraining: rating => rating = rating => rating;
