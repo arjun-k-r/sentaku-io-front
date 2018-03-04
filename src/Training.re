@@ -65,8 +65,8 @@ module TrainingFooter = {
                     </li>
                     <li className="indicator"></li>
                 </ul>
-                /* <Description />
-                <Ratings />
+                <Description />
+                /* <Ratings />
                 <Rating /> */
             </div>
     };
