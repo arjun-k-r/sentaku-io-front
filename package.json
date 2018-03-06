@@ -1,6 +1,7 @@
 {
   "name": "sentaku-io-front",
   "scripts": {
+    "start": "bsb -make-world -w",
     "build:bsb": "bsb -make-world",
     "build:webpack": "webpack",
     "clean:bsb": "bsb -clean-world"
