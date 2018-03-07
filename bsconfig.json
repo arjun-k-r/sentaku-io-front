@@ -1,5 +1,6 @@
 {
   "name": "Sentakuio-front",
+  "bsc-flags": ["-bs-super-errors"],
   "reason": {
     "react-jsx": 2
   },

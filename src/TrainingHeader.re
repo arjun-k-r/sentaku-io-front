@@ -2,15 +2,9 @@ open Model;
 /**
  * This module shows the training infos
  */
-
- type state = {
-    foo: string
- };
-let component = ReasonReact.reducerComponent("TrainingHeader");
+let component = ReasonReact.statelessComponent("TrainingHeader");
 let make = (children) => {
     ...component,
-    initialState: _state => { foo : ""},
-    reducer: ((), _) => ReasonReact.NoUpdate,
     render: self =>
         <div className="col m12 card">
             <div className="col m3">
@@ -21,7 +15,7 @@ let make = (children) => {
                 <h1 className="formation-title"> (str("Miage lille")) </h1>
             </div>
             <div className="col m12 center">
-                <div className="col m4"> (str("Note la plus basse : 12")) </div>
+                <div className="col m4"> (str("BONJOURNote la plus basse : 12")) </div>
                 <div className="col m4"> (str("Moyenne des notes : 17")) </div>
                 <div className="col m4"> (str("Note la plus haute : 20")) </div>
             </div>

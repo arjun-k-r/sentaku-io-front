@@ -1,4 +1,3 @@
-open Training;
 /**
  * Entry point of the app
  */

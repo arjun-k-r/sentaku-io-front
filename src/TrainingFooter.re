@@ -2,10 +2,9 @@ open Model;
 /**
  * This module is the tab panel at the bottom of a training where the ratings are displayed
  */
-let component = ReasonReact.reducerComponent("TrainingFooter");
+let component = ReasonReact.statelessComponent("TrainingFooter");
 let make = (children) => {
     ...component,
-    reducer: ((), _) => ReasonReact.NoUpdate,
     render: self =>
         <div className="col m12 card">
             <ul id="tabs-swipe-demo" className="tabs">
