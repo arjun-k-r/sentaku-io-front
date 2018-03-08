@@ -14,8 +14,8 @@ type rating = {
 };
 
 type ratingOverview = {
-  average: int,
-  ratings: array(rating)
+  average: option(int),
+  ratings: option(array(rating))
 };
 /*
  * This following type defines a training
