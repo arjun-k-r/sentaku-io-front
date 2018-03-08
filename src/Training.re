@@ -4,6 +4,7 @@
  * US_07
  */
 open Model;
+open Utils;
 open TrainingDecode;
 
 /**
@@ -23,17 +24,26 @@ module TrainingHeader = {
                   <h1 className="formation-title"> (str(training.title)) </h1>
               </div>
               <div className="col m12 center">
-                  <div className="col m4"> (str("ETCS : " ++ 
-                  switch training.etcsNumber {
-                  | Some(etcs) => string_of_int(etcs)
-                  | None=> "Non renseigné"
-                  } )) </div>
+                  (str("Localisation géographique : " ++ training.location))
+              </div>
+              <div className="col m12 center">
+                  <div className="col m4"> (str("Note la plus basse : 12")) </div>
                   <div className="col m4"> (str("Moyenne des notes : 17")) </div>
                   <div className="col m4"> (str("Note la plus haute : 20")) </div>
               </div>
+              <div className="col m12 center">
+                  <div className="col m4"> (str("ETCS : " ++ 
+                    optIntStr(training.etcsNumber)))
+                  </div>
+                  <div className="col m4"> (str("Modalités d'admission : " ++ training.admissionModalities)) </div>
+                  <div className="col m4"> (str("Niveau d'étude : " ++ string_of_int(training.degreeLevel))) </div>
+              </div>
+              <div className="col m12 center">
+                  (str("Diplôme délivré : " ++ opt(training.diploma)))
+              </div>
               <div className="col m12 list-tags">
                   <ul>
-                    <li> <span className="tag orange"> (str("Lille")) </span> </li>
+                  <li> <span className="tag orange"> (str("Lille")) </span> </li>
                   <li>
                       <span className="tag green"> (str("Informatique")) </span>
                   </li>
@@ -127,8 +137,8 @@ let make = _children => {
   },
   render: (self) =>
     switch self.state {
-    | Error => <div> (str("Can't fetch the training!")) </div>
-    | Loading => <div> (str("Loading...")) </div>
+    | Error => <div> (str("Nous n'arrivons pas à récupérer la formation :( !")) </div>
+    | Loading => <div> (str("Chargement de la page ...")) </div>
     | Loaded(training) =>
       <div className="row content">
         <div className="col m8 offset-m2">
