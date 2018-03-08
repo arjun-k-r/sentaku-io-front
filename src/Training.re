@@ -11,7 +11,7 @@ open TrainingDecode;
 */
 module TrainingHeader = {
   let component = ReasonReact.statelessComponent("TrainingHeader");
-  let make = (children) => {
+  let make = (~training, children) => {
       ...component,
       render: self =>
           <div className="col m12 card">
@@ -20,7 +20,7 @@ module TrainingHeader = {
               </div>
               <div className="col m9">
               <div className="col m12 center">
-                  <h1 className="formation-title"> (str("Miage lille")) </h1>
+                  <h1 className="formation-title"> (str(training.title)) </h1>
               </div>
               <div className="col m12 center">
                   <div className="col m4"> (str("Note la plus basse : 12")) </div>
@@ -47,7 +47,7 @@ module TrainingHeader = {
 */
 module TrainingFooter = {
   let component = ReasonReact.statelessComponent("TrainingFooter");
-  let make = (children) => {
+  let make = (~training, children) => {
     ...component,
     render: self =>
         <div className="col m12 card">
@@ -65,8 +65,8 @@ module TrainingFooter = {
             </li>
             <li className="indicator" />
             </ul>
-            <Description />
-            <Ratings />
+            <Description training/>
+            <Ratings training/>
             /* <Rating /> */
         </div>
   };
@@ -100,7 +100,11 @@ let make = _children => {
                 |> then_(json =>
                     json
                     |> TrainingDecode.training
-                    |> (training => self.send(TrainingFetched(training)))
+                    /* |> (training => {
+                      Js.log(training);
+                      training
+                    }) */
+                    |> (training => self.send(TrainingFetched(training.training)))
                     |> resolve
                   )
                 |> catch(_err =>
@@ -119,14 +123,14 @@ let make = _children => {
   },
   render: (self) =>
     switch self.state {
-    | Error => <div> (str("An error occurred!")) </div>
+    | Error => <div> (str("Can't fetch the training!")) </div>
     | Loading => <div> (str("Loading...")) </div>
     | Loaded(training) =>
       <div className="row content">
         <div className="col m8 offset-m2">
-        (str(training.title))
-          <TrainingHeader />
-          <TrainingFooter />
+        <TrainingHeader training/>
+        /*(str(training.title))*/
+          <TrainingFooter training/>
         </div>
       </div>
     }

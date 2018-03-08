@@ -1,14 +1,25 @@
 open Model;
 
+type tr = {
+    training: training
+};
+
+let parseTr = json =>
+    Json.Decode.{
+        id: json |> field("id", string),
+        title: json |> field("title", string),
+        description: json |> field("description", string),
+        degreeLevel: json |> field("degreeLevel", int),
+        etcsNumber: json |> optional(field("ETCSNumber", int)),
+        diploma: json |> optional(field("diploma", string)),
+        admissionModalities: json |> field("admissionModalities", string),
+        logo: json |> field("logo", string),
+        location: json |> field("location", string),
+        link: json |> field("link", string),
+        tags: json |> optional(field("tags", array(string)))
+    };
+
 let training = json =>
     Json.Decode.{
-        id: field("id", int, json),
-        title: field("id", string, json),
-        description: field("id", string, json),
-        degreeLevel: field("id", int, json),
-        etcsNumber: field("id", int, json),
-        diploma: field("id", string, json),
-        admissionModalities: field("id", string, json),
-        logo: field("id", string, json),
-        link: field("id", string, json)
+        training: json |> field("training", parseTr)
     };

@@ -4,7 +4,7 @@ open Model;
 
 let component = ReasonReact.statelessComponent("Ratings");
 
-let make = children => {
+let make = (~training, children) => {
     ...component,
   render: self =>
     <div id="test-swipe-2" className="col s12" >
