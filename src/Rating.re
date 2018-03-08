@@ -6,17 +6,18 @@ let component = ReasonReact.statelessComponent("Rating");
 
 let note = 3;
 
-let starsArray = [0, 0, 0, 0, 0]; /*put this in a state*/
+let starsArray = [0, 0, 0, 0, 0] /*put this in a state*/;
 
 module Star = {
-    let component = ReasonReact.statelessComponent("Star");
-    let make = (~checked, _) => {
-        ...component, 
-        render: self => 
-        <div>
-            (str(checked ? "1" : "0"))
-        </div>
-    };
+  let component = ReasonReact.statelessComponent("Star");
+  let make = (~checked, ~id, _) => {
+    ...component,
+    render: self =>
+      <div> <img
+      onMouseEnter={event => Js.log(id)} 
+      onMouseLeave={event => Js.log(id)}
+       src=(checked ? "images/star-filled.png" : "images/star-stroke.png") /> </div>
+  };
 };
 
 let make = children => {
@@ -25,23 +26,23 @@ let make = children => {
     <div id="test-swipe-3" className="col s12">
       <form className="col s12">
         <div className="row">
-            <div className="input-field col s20">
+          <div className="input-field col s20">
             (
-                ReasonReact.arrayToElement(
-                    Array.of_list(
-                        List.mapi(
-                        (i, item) => 
-                            <Star key=(string_of_int(i)) checked=(i < note) />, 
-                        starsArray
-                        )
-                    )
+              ReasonReact.arrayToElement(
+                Array.of_list(
+                  List.mapi(
+                    (i, item) =>
+                      <Star key=(string_of_int(i)) id=(string_of_int(i)) checked=(i < note) />,
+                    starsArray
+                  )
                 )
+              )
             )
-            </div>
+          </div>
         </div>
         <div className="row">
           <div className="input-field col s12">
-          <h5> (str("Votre commentaire : ")) </h5>
+            <h5> (str("Votre commentaire : ")) </h5>
             <textarea id="icon_prefix2" className="materialize-textarea" />
           </div>
         </div>
