@@ -1,6 +1,6 @@
 open Model;
 
-let training = (json) =>
+let training = json =>
     Json.Decode.{
         id: field("id", int, json),
         title: field("id", string, json),
