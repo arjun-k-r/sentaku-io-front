@@ -5,15 +5,17 @@
  * This following type defines a training
  */
 type training = {
-  id: int,
+  id: option(string),
   title: string,
   description: string,
   degreeLevel: int,
-  etcsNumber: int,
-  diploma: string,
+  etcsNumber: option(int),
+  diploma: option(string),
   admissionModalities: string,
   logo: string,
-  link: string
+  location: string,
+  link: string,
+  tags: option(array(string))
 };
 
 /**

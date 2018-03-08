@@ -1,18 +1,22 @@
 {
   "name": "sentaku-io-front",
   "scripts": {
+    "start": "bsb -make-world -w",
     "build:bsb": "bsb -make-world",
     "build:webpack": "webpack",
     "clean:bsb": "bsb -clean-world"
   },
   "dependencies": {
-    "webpack": "^3.11.0",
+    "@glennsl/bs-json": "^1.1.2",
+    "bs-fetch": "^0.2.1",
     "bsb": "0.0.1",
+    "npm": "^5.7.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "reason-react": "^0.2.4"
+    "reason-react": "^0.3.1",
+    "webpack": "^3.11.0"
   },
   "devDependencies": {
-    "bs-platform": "^2.2.1"
+    "bs-platform": "^2.2.2"
   }
 }
