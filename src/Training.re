@@ -11,6 +11,15 @@ open TrainingDecode;
 * This module shows the training infos
 */
 module TrainingHeader = {
+  let randomColor = (n) =>
+    switch n {
+    | 0 => "orange"
+    | 1 => "blue"
+    | 2 => "red"
+    | 3 => "green"
+    | _ => "white"
+    };
+
   let component = ReasonReact.statelessComponent("TrainingHeader");
   let make = (~training, children) => {
       ...component,
@@ -41,13 +50,23 @@ module TrainingHeader = {
                   <div className="col m6"> (str("Diplôme délivré : " ++ opt(training.diploma))) </div>
               </div>
               <div className="col m12 list-tags">
-                  <ul>
-                  <li> <span className="tag orange"> (str("Lille")) </span> </li>
-                  <li>
-                      <span className="tag green"> (str("Informatique")) </span>
-                  </li>
-                  <li> <span className="tag blue"> (str("Master")) </span> </li>
-                  <li> <span className="tag red"> (str("Miage")) </span> </li>
+              <ul>
+                  (
+                    switch(training.tags) {
+                      | Some(tags) => 
+                      if(Array.length(tags) === 0) {
+                        str("Aucun tag")
+                      } else {
+                        ReasonReact.arrayToElement(Array.map(
+                          (tag : string) =>
+                          <li> <span className=("tag " ++ randomColor(Random.int(3)))> (str(tag)) </span> </li>,
+                          tags
+                        ))
+  
+                      }
+                      | None => str("Aucun tag")
+                    }
+                  )
                   </ul>
               </div>
               </div>
@@ -108,7 +127,7 @@ let make = _children => {
           (
             self =>
               Js.Promise.(
-                Fetch.fetch("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/3d74f052-082b-4f56-867c-511406e90681")
+                Fetch.fetch("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/382461c8-9cf9-4f3d-9132-6126999c968e")
                 |> then_(Fetch.Response.json)
                 |> then_(json =>
                     json
