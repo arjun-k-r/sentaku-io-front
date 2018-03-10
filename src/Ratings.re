@@ -9,10 +9,12 @@ let make = (~training, children) => {
     ...component,
   render: self =>
     <div id="test-swipe-2" className="col s12">
-    <p>
       (
         switch(training.ratingOverview.ratings) {
           | Some(ratings) => 
+          if(Array.length(ratings) === 0) {
+            str("Aucune note")
+          } else {
             ReasonReact.arrayToElement(Array.map(
               (rating : rating) =>
                 <Rating
@@ -21,9 +23,10 @@ let make = (~training, children) => {
                 />,
               ratings
             ))
+
+          }
           | None => str("Aucune note")
         }
       )
-      </p>
     </div>
 };

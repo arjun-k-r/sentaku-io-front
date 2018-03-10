@@ -5,7 +5,7 @@ open Model;
 let optStr = opt =>
     switch opt {
     | Some(value) => str(value)
-    | None => str("")
+    | None => str("Non renseigné")
     };
 
 let optIntStr= opt=>
@@ -16,5 +16,5 @@ switch opt {
 let opt = opt =>
     switch opt {
     | Some(value) => value
-    | None => ""
+    | None => "Non renseigné"
 };
