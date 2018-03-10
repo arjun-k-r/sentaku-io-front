@@ -17,11 +17,14 @@ module TrainingHeader = {
       render: self =>
           <div className="col m12 card">
               <div className="col m3">
-              <img src=(training.link) className="responsive-img" />
+              <img src=(training.logo) className="responsive-img" />
               </div>
               <div className="col m9">
               <div className="col m12 center">
-                  <h1 className="formation-title"> (str(training.title)) </h1>
+                  <h1 className="formation-title">(str(training.title))</h1>
+              </div>
+              <div className="col m12 center">
+              <a src=(training.link)>(str("Lien du site"))</a>
               </div>
               <div className="col m12 center">
                   (str("Localisation géographique : " ++ training.location))
