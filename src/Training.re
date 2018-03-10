@@ -82,25 +82,31 @@ module TrainingFooter = {
   let make = (~training, children) => {
     ...component,
     render: self =>
-        <div className="col m12 card">
-            <ul id="tabs-swipe-demo" className="tabs">
-              <li className="tab col s4">
-                  <a className="active" href="#test-swipe-1">
+      <div className="col m12 card">
+        <div className="col m12">
+          <ul id="tabs-swipe-demo" className="tabs">
+            <li className="tab col s4">
+                <a className="active" href="#test-swipe-1">
                   (str("Description"))
-                  </a>
-              </li>
-              <li className="tab col s4">
-                  <a href="#test-swipe-2"> (str("Commentaire")) </a>
-              </li>
-              <li className="tab col s4">
-                  <a href="#test-swipe-3"> (str("Laisser un commentaire")) </a>
-              </li>
-              <li className="indicator" />
-            </ul>
-            <Description training/>
-            <Ratings training/>
-            /* <Newrating /> */
+                </a>
+            </li>
+            <li className="tab col s4">
+                <a href="#test-swipe-2"> 
+                  (str("Commentaire"))
+                </a>
+            </li>
+            <li className="tab col s4">
+                <a href="#test-swipe-3">
+                  (str("Laisser un commentaire"))
+                </a>
+            </li>
+            <li className="indicator" />
+          </ul>
         </div>
+          <Description training/>
+          <Ratings training/>
+          /* <Newrating /> */
+      </div>
   };
 };
 
@@ -160,8 +166,7 @@ let make = _children => {
     | Loaded(training) =>
       <div className="row content">
         <div className="col m8 offset-m2">
-        <TrainingHeader training/>
-        /*(str(training.title))*/
+          <TrainingHeader training/>
           <TrainingFooter training/>
         </div>
       </div>
