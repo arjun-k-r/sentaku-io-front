@@ -30,11 +30,6 @@ module TrainingHeader = {
                   (str("Localisation géographique : " ++ training.location))
               </div>
               <div className="col m12 center">
-                  <div className="col m4"> (str("Note la plus basse : 12")) </div>
-                  <div className="col m4"> (str("Moyenne des notes : 17")) </div>
-                  <div className="col m4"> (str("Note la plus haute : 20")) </div>
-              </div>
-              <div className="col m12 center">
                   <div className="col m4"> (str("ETCS : " ++ 
                     optIntStr(training.etcsNumber)))
                   </div>
@@ -42,7 +37,8 @@ module TrainingHeader = {
                   <div className="col m4"> (str("Niveau d'étude : " ++ string_of_int(training.degreeLevel))) </div>
               </div>
               <div className="col m12 center">
-                  (str("Diplôme délivré : " ++ opt(training.diploma)))
+                  <div className="col m6"> (str("Moyenne des notes : " ++ optIntStr(training.ratingOverview.average))) </div>
+                  <div className="col m6"> (str("Diplôme délivré : " ++ opt(training.diploma))) </div>
               </div>
               <div className="col m12 list-tags">
                   <ul>
