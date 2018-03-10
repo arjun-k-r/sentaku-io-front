@@ -13,7 +13,7 @@ install:
 script:
   - yarn clean:bsb
   - yarn build:bsb
-  - yarn build:webpack
+  - yarn build:webpack:prod
 before_deploy: "echo 'Deployment to firebase :)'"
 deploy:
   provider: firebase

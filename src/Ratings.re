@@ -9,6 +9,7 @@ let make = (~training, children) => {
     ...component,
   render: self =>
     <div id="test-swipe-2" className="col s12">
+    <p>
       (
         switch(training.ratingOverview.ratings) {
           | Some(ratings) => 
@@ -28,5 +29,6 @@ let make = (~training, children) => {
           | None => str("Aucune note")
         }
       )
+      </p>
     </div>
 };
