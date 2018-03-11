@@ -190,3 +190,15 @@ h3 {
 #test-swipe-2 {
   display: none;
 }
+
+/*
+Fighting against materialize's authority
+*/
+select {
+  width:100%!important;
+  height:100%!important;
+  /*display:inline!important;*/
+  position: inherit!important;
+  opacity: 100!important;
+  pointer-events:inherit!important;
+}
