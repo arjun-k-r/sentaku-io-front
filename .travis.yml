@@ -3,16 +3,17 @@ sudo: required
 node_js:
   - 9.5.0
 cache: 
-  yarn: true
+  yarn: false
   directories:
     - node_modules
 before_install:
   - 'npm i -g firebase-tools'
 install:
-  - yarn install
+  - npm install
 script:
-  - yarn build:bsb
-  - yarn build:webpack
+  - npm run clean:bsb
+  - npm run build:bsb
+  - npm run build:webpack:prod
 before_deploy: "echo 'Deployment to firebase :)'"
 deploy:
   provider: firebase
