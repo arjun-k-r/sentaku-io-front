@@ -59,7 +59,8 @@ module TrainingHeader = {
                       } else {
                         ReasonReact.arrayToElement(Array.map(
                           (tag : string) =>
-                          <li> <span className=("tag " ++ randomColor(Random.int(3)))> (str(tag)) </span> </li>,
+                          <li key=(tag)> <span 
+                            className=("tag " ++ randomColor(Random.int(3)))> (str(tag)) </span> </li>,
                           tags
                         ))
   
