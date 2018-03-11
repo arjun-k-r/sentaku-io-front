@@ -2,21 +2,37 @@ open ServicesMocks;
 
 open Model;
 
-let component = ReasonReact.statelessComponent("Rating");
+type starAction = 
+  | OnStar(int)
+  | OutStar(int)
+  | StarClicked(int);
 
-let note = 3;
+
+let component = ReasonReact.statelessComponent("NewRating");
+
+let rating = 3;
 
 let starsArray = [0, 0, 0, 0, 0] /*put this in a state*/;
 
 module Star = {
-  let component = ReasonReact.statelessComponent("Star");
-  let make = (~checked, ~id, _) => {
+  type state = {shownRating: int};
+  let component = ReasonReact.reducerComponent("Star");
+  let make = (~id, _) => {
     ...component,
-    render: self =>
+    initialState: () => {
+      shownRating : 0
+    },
+    reducer: (starAction, _) =>
+      switch starAction {
+      | OnStar(id) => Js.log(id);ReasonReact.Update({shownRating : id})
+      | OutStar(id) => ReasonReact.Update({shownRating : rating})
+      | StarClicked(id) => ReasonReact.Update({shownRating : rating})
+      },
+    render: (self) => {
       <div> <img
-      onMouseEnter={event => Js.log(id)} 
-      onMouseLeave={event => Js.log(id)}
-       src=(checked ? "images/star-filled.png" : "images/star-stroke.png") /> </div>
+      onMouseEnter=(self.reduce((_evt) => OnStar(id))) 
+       src=(id <= self.state.shownRating ? "images/star-filled.png" : "images/star-stroke.png") /> </div>
+    }
   };
 };
 
@@ -32,7 +48,7 @@ let make = children => {
                 Array.of_list(
                   List.mapi(
                     (i, item) =>
-                      <Star key=(string_of_int(i)) id=(string_of_int(i)) checked=(i < note) />,
+                      <Star key=(string_of_int(i)) id=i/>,
                     starsArray
                   )
                 )

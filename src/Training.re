@@ -68,7 +68,7 @@ module TrainingFooter = {
         </ul>
         <Description />
         <Ratings />
-        <Rating />
+        <NewRating />
       </div>
   };
 };
