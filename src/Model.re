@@ -10,7 +10,7 @@ type rating = {
   ownerId: string,
   rate: int, /* la note */
   comment: string,
-  trainingId: int
+  trainingId: string
 };
 
 type ratingOverview = {

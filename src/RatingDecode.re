@@ -10,7 +10,7 @@ let parseRating = json =>
         ownerId: json |> field("ownerId", string),
         rate: json |> field("rate", int),
         comment: json |> field("comment", string),
-        trainingId: json |> field("trainingId", int)
+        trainingId: json |> field("trainingId", string)
     };
 
 let rating = json =>

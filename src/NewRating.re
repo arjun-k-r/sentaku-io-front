@@ -16,6 +16,7 @@ type state = {
 };
 
 type action=
+  | EditedRate(int)
   | EditedComment(string)
   | PostRating
   | PostedRating(rating)
@@ -66,15 +67,16 @@ let make = (~training, children) => {
     globalState: Empty, 
     rating:{
       id: 0,
-      ownerId: "",
+      ownerId: "f1b3f890-2616-11e8-b467-0ed5f89f718b",
       rate: 0,
       comment: "",
-      trainingId: 0
+      trainingId: training.id
     }
   },
   reducer: (action, {globalState, rating}) => 
     switch action {
       | EditedComment(comment) => ReasonReact.Update({globalState, rating: {...rating, comment: comment}})
+      | EditedRate(rate) => ReasonReact.NoUpdate
       | PostRating => 
       ReasonReact.UpdateWithSideEffects({globalState: Loading, rating}, (
         self => Js.Promise.(
@@ -101,38 +103,11 @@ let make = (~training, children) => {
       | FailedPostingRating => ReasonReact.Update({globalState: Error, rating})
           
   },
-  didMount: {{rating}} => {
-    ReasonReact.Update({globalState: Empty, rating});
+  didMount: self => {
+    ReasonReact.Update({globalState: Empty, rating: self.state.rating});
   },
-  /* switch action {
-    | PostRating => ReasonReact.UpdateWithSideEffects(Loading, (
-      self => Js.Promise.(
-        Fetch.fetchWithInit(
-          "https://sentaku-api-prod.herokuapp.com/api/v1/notes/trainingId/382461c8-9cf9-4f3d-9132-6126999c968e",
-          initRatingRequest(testData)
-        )
-        |> then_(Fetch.Response.json)
-        |> then_(json => 
-          json
-          |> RatingDecode.rating
-          |> resolve
-        )
-      )));
-    | PostedRating(rating) => ReasonReact.NoUpdate();
-    | FailedPostingRating => ReasonReact.NoUpdate(); */
- /* ReasonReact.UpdateWithSideEffects(Loading, 
-    (
-      self => Js.Promise.(
-        Fetch.fetchWithInit(
-          "https://sentaku-api-prod.herokuapp.com/api/v1/notes/trainingId/ca7c1b46-a66e-44f8-b418-a823ccdd57a2", 
-          Fetch.RequestInit.make(~method_=Post, Fetch.BodyInit.make(
-            "\"id\":\"a7383-3782-3783-3283\", \"trainingId\":\"\", \"note\":3, \"comment\":\"Une bonne formation dans l'esnemble\"")
-      )
-    ))); */
-
-  /* }, */
   render: self =>
-    switch self.state {
+    switch self.state.globalState {
     | Empty => 
       <div id="test-swipe-3" className="col s12">
           <form className="col s12">
