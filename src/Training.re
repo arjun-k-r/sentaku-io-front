@@ -4,37 +4,70 @@
  * US_07
  */
 open Model;
+open Utils;
 open TrainingDecode;
 
 /**
 * This module shows the training infos
 */
 module TrainingHeader = {
+  let randomColor = (n) =>
+    switch n {
+    | 0 => "orange"
+    | 1 => "blue"
+    | 2 => "red"
+    | 3 => "green"
+    | _ => "white"
+    };
+
   let component = ReasonReact.statelessComponent("TrainingHeader");
   let make = (~training, children) => {
       ...component,
       render: self =>
           <div className="col m12 card">
               <div className="col m3">
-              <img src="images/miage.png" className="responsive-img" />
+              <img src=(training.logo) className="responsive-img" />
               </div>
               <div className="col m9">
               <div className="col m12 center">
-                  <h1 className="formation-title"> (str(training.title)) </h1>
+                  <h1 className="formation-title">(str(training.title))</h1>
               </div>
               <div className="col m12 center">
-                  <div className="col m4"> (str("Note la plus basse : 12")) </div>
-                  <div className="col m4"> (str("Moyenne des notes : 17")) </div>
-                  <div className="col m4"> (str("Note la plus haute : 20")) </div>
+              <a src=(training.link)>(str("Lien du site"))</a>
+              </div>
+              <div className="col m12 center">
+                  (str("Localisation géographique : " ++ training.location))
+              </div>
+              <div className="col m12 center">
+                  <div className="col m4"> (str("ETCS : " ++ 
+                    optIntStr(training.etcsNumber)))
+                  </div>
+                  <div className="col m4"> (str("Modalités d'admission : " ++ training.admissionModalities)) </div>
+                  <div className="col m4"> (str("Niveau d'étude : " ++ string_of_int(training.degreeLevel))) </div>
+              </div>
+              <div className="col m12 center">
+                  <div className="col m6"> (str("Moyenne des notes : " ++ optIntStr(training.ratingOverview.average))) </div>
+                  <div className="col m6"> (str("Diplôme délivré : " ++ opt(training.diploma))) </div>
               </div>
               <div className="col m12 list-tags">
-                  <ul>
-                  <li> <span className="tag orange"> (str("Lille")) </span> </li>
-                  <li>
-                      <span className="tag green"> (str("Informatique")) </span>
-                  </li>
-                  <li> <span className="tag blue"> (str("Master")) </span> </li>
-                  <li> <span className="tag red"> (str("Miage")) </span> </li>
+              <ul>
+                  (
+                    switch(training.tags) {
+                      | Some(tags) => 
+                      if(Array.length(tags) === 0) {
+                        str("Aucun tag")
+                      } else {
+                        ReasonReact.arrayToElement(Array.map(
+                          (tag : string) =>
+                          <li key=(tag)> <span 
+                            className=("tag " ++ randomColor(Random.int(3)))> (str(tag)) </span> </li>,
+                          tags
+                        ))
+  
+                      }
+                      | None => str("Aucun tag")
+                    }
+                  )
                   </ul>
               </div>
               </div>
@@ -50,25 +83,31 @@ module TrainingFooter = {
   let make = (~training, children) => {
     ...component,
     render: self =>
-        <div className="col m12 card">
-            <ul id="tabs-swipe-demo" className="tabs">
+      <div className="col m12 card">
+        <div className="col m12">
+          <ul id="tabs-swipe-demo" className="tabs">
             <li className="tab col s4">
                 <a className="active" href="#test-swipe-1">
-                (str("Description"))
+                  (str("Description"))
                 </a>
             </li>
             <li className="tab col s4">
-                <a href="#test-swipe-2"> (str("Commentaire")) </a>
+                <a href="#test-swipe-2"> 
+                  (str("Commentaire"))
+                </a>
             </li>
             <li className="tab col s4">
-                <a href="#test-swipe-3"> (str("Laisser un commentaire")) </a>
+                <a href="#test-swipe-3">
+                  (str("Laisser un commentaire"))
+                </a>
             </li>
             <li className="indicator" />
-            </ul>
-            <Description training/>
-            <Ratings training/>
-            /* <Rating /> */
+          </ul>
         </div>
+          <Description training/>
+          <Ratings training/>
+          /* <Newrating /> */
+      </div>
   };
 };
 
@@ -95,7 +134,7 @@ let make = _children => {
           (
             self =>
               Js.Promise.(
-                Fetch.fetch("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/3d74f052-082b-4f56-867c-511406e90681")
+                Fetch.fetch("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/382461c8-9cf9-4f3d-9132-6126999c968e")
                 |> then_(Fetch.Response.json)
                 |> then_(json =>
                     json
@@ -123,13 +162,12 @@ let make = _children => {
   },
   render: (self) =>
     switch self.state {
-    | Error => <div> (str("Can't fetch the training!")) </div>
-    | Loading => <div> (str("Loading...")) </div>
+    | Error => <div> (str("Nous n'arrivons pas à récupérer la formation :( !")) </div>
+    | Loading => <div> (str("Chargement de la page ...")) </div>
     | Loaded(training) =>
       <div className="row content">
         <div className="col m8 offset-m2">
-        <TrainingHeader training/>
-        /*(str(training.title))*/
+          <TrainingHeader training/>
           <TrainingFooter training/>
         </div>
       </div>

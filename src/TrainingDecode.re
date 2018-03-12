@@ -1,8 +1,28 @@
 open Model;
 
-type tr = {
+type response = {
     training: training
 };
+
+let parseRating = json =>
+    Json.Decode.{
+        id: json |> field("id", int),
+        ownerId: json |> field("ownerId", string),
+        rate: json |> field("rate", int),
+        comment: json |> field("comment", string),
+        trainingId: json |> field("trainingId", int)
+    };
+
+let parseRatings = json => {
+    json |> Json.Decode.array(parseRating)
+         |> Array.map(rating =>  rating)
+};
+
+let parseNotesOverview = json => 
+    Json.Decode.{
+        average: json |> optional(field("average", int)),
+        ratings: json |> optional(field("notes", parseRatings))
+    };
 
 let parseTr = json =>
     Json.Decode.{
@@ -16,7 +36,8 @@ let parseTr = json =>
         logo: json |> field("logo", string),
         location: json |> field("location", string),
         link: json |> field("link", string),
-        tags: json |> optional(field("tags", array(string)))
+        tags: json |> optional(field("tags", array(string))),
+        ratingOverview: json |> field("noteOverview", parseNotesOverview)
     };
 
 let training = json =>

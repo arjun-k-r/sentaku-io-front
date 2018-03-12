@@ -3,7 +3,8 @@
   "scripts": {
     "start": "bsb -make-world -w",
     "build:bsb": "bsb -make-world",
-    "build:webpack": "webpack",
+    "build:webpack": "webpack --mode development",
+    "build:webpack:prod": "webpack --mode production",
     "clean:bsb": "bsb -clean-world"
   },
   "dependencies": {
@@ -11,10 +12,11 @@
     "bs-fetch": "^0.2.1",
     "bsb": "0.0.1",
     "npm": "^5.7.1",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "reason-react": "^0.3.1",
-    "webpack": "^3.11.0"
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.11"
   },
   "devDependencies": {
     "bs-platform": "^2.2.2"
