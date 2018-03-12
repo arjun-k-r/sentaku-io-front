@@ -1,4 +1,4 @@
 /**
  * Entry point of the app
  */
-ReactDOMRe.renderToElementWithId(<Training />, "root");
+ReactDOMRe.renderToElementWithId(<Trainings />, "root");
