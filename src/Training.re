@@ -106,7 +106,7 @@ module TrainingFooter = {
         </div>
           <Description training/>
           <Ratings training/>
-          /* <Newrating /> */
+          <NewRating /> 
       </div>
   };
 };
