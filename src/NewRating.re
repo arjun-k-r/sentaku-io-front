@@ -66,9 +66,9 @@ let make = (~training, children) => {
   initialState: () => {
     globalState: Empty, 
     rating:{
-      id: 0,
+      id: -1,
       ownerId: "f1b3f890-2616-11e8-b467-0ed5f89f718b",
-      rate: 0,
+      rate: 1,
       comment: "",
       trainingId: training.id
     }
@@ -76,12 +76,12 @@ let make = (~training, children) => {
   reducer: (action, {globalState, rating}) => 
     switch action {
       | EditedComment(comment) => ReasonReact.Update({globalState, rating: {...rating, comment}})
-      | EditedRate(rate) => ReasonReact.Update({globalState, rating: {...rating, rate}})
+      | EditedRate(rate) => ReasonReact.Update({globalState, rating: {...rating, rate}});
       | PostRating => 
       ReasonReact.UpdateWithSideEffects({globalState: Loading, rating}, 
         (
           self => Js.Promise.(
-            Fetch.fetchWithInit("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/382461c8-9cf9-4f3d-9132-6126999c968e/notes", 
+            Fetch.fetchWithInit("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/" ++ training.id ++ "/notes", 
               Fetch.RequestInit.make(~method_=Post, ~headers= Fetch.HeadersInit.makeWithArray([|("content-type", "application/json")|]),~body=Fetch.BodyInit.make @@ Js.Json.stringify(testData(rating)), ()))
               |> then_(Fetch.Response.json)
               |> then_(json =>
@@ -115,7 +115,7 @@ let make = (~training, children) => {
             <div className="row">
               <div className="input-field col s20">
               <h5> (str("Votre note : ")) </h5>
-                <select>
+                <select onChange=(evt => self.send(EditedRate(int_of_string(valueFromEvent(evt)))))>
                   <option value="1">(str("1"))</option>
                   <option value="2">(str("2"))</option>
                   <option value="3">(str("3"))</option>
