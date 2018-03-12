@@ -75,29 +75,30 @@ let make = (~training, children) => {
   },
   reducer: (action, {globalState, rating}) => 
     switch action {
-      | EditedComment(comment) => ReasonReact.Update({globalState, rating: {...rating, comment: comment}})
-      | EditedRate(rate) => ReasonReact.NoUpdate
+      | EditedComment(comment) => ReasonReact.Update({globalState, rating: {...rating, comment}})
+      | EditedRate(rate) => ReasonReact.Update({globalState, rating: {...rating, rate}})
       | PostRating => 
-      ReasonReact.UpdateWithSideEffects({globalState: Loading, rating}, (
-        self => Js.Promise.(
-          Fetch.fetchWithInit("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/382461c8-9cf9-4f3d-9132-6126999c968e/notes", 
-            Fetch.RequestInit.make(~method_=Post, ~headers= Fetch.HeadersInit.makeWithArray([|("content-type", "application/json")|]),~body=Fetch.BodyInit.make @@ Js.Json.stringify(testData), ()))
-            |> then_(Fetch.Response.json)
-            |> then_(json =>
-                json
-                |> RatingDecode.rating
-                /* |> (training => {
-                  Js.log(training);
-                  training
-                }) */
-                |> (rating => self.send(PostedRating(rating.rating)))
-                |> resolve
-              )
-            |> catch(_err =>
-                Js.Promise.resolve(self.send(FailedPostingRating))
-              )
-            |> ignore
-        )
+      ReasonReact.UpdateWithSideEffects({globalState: Loading, rating}, 
+        (
+          self => Js.Promise.(
+            Fetch.fetchWithInit("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/382461c8-9cf9-4f3d-9132-6126999c968e/notes", 
+              Fetch.RequestInit.make(~method_=Post, ~headers= Fetch.HeadersInit.makeWithArray([|("content-type", "application/json")|]),~body=Fetch.BodyInit.make @@ Js.Json.stringify(testData), ()))
+              |> then_(Fetch.Response.json)
+              |> then_(json =>
+                  json
+                  |> RatingDecode.rating
+                  /* |> (training => {
+                    Js.log(training);
+                    training
+                  }) */
+                  |> (rating => self.send(PostedRating(rating.rating)))
+                  |> resolve
+                )
+              |> catch(_err =>
+                  Js.Promise.resolve(self.send(FailedPostingRating))
+                )
+              |> ignore
+          )
         ));
       | PostedRating(training) => ReasonReact.Update({globalState: Posted(training), rating})
       | FailedPostingRating => ReasonReact.Update({globalState: Error, rating})
