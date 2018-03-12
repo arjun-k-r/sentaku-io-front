@@ -46,7 +46,7 @@ module TrainingHeader = {
                   <div className="col m4"> (str("Niveau d'étude : " ++ string_of_int(training.degreeLevel))) </div>
               </div>
               <div className="col m12 center">
-                  <div className="col m6"> (str("Moyenne des notes : " ++ optIntStr(training.ratingOverview.average))) </div>
+                  <div className="col m6"> (str("Moyenne des notes : " ++ optFloatStr(training.ratingOverview.average))) </div>
                   <div className="col m6"> (str("Diplôme délivré : " ++ opt(training.diploma))) </div>
               </div>
               <div className="col m12 list-tags">
@@ -106,7 +106,7 @@ module TrainingFooter = {
         </div>
           <Description training/>
           <Ratings training/>
-          <NewRating /> 
+          <NewRating training/> 
       </div>
   };
 };

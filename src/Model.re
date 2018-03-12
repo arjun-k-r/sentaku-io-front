@@ -14,7 +14,7 @@ type rating = {
 };
 
 type ratingOverview = {
-  average: option(int),
+  average: option(float),
   ratings: option(array(rating))
 };
 /*

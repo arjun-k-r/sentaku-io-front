@@ -13,6 +13,13 @@ switch opt {
     | Some(value) => string_of_int(value)
     | None => "Non renseigné"
 };
+
+let optFloatStr = opt=>
+switch opt {
+    | Some(value) => string_of_float(value)
+    | None => "Non renseigné"
+};
+
 let opt = opt =>
     switch opt {
     | Some(value) => value

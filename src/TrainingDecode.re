@@ -20,7 +20,7 @@ let parseRatings = json => {
 
 let parseNotesOverview = json => 
     Json.Decode.{
-        average: json |> optional(field("average", int)),
+        average: json |> optional(field("average", float)),
         ratings: json |> optional(field("notes", parseRatings))
     };
 
