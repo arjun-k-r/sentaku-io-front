@@ -22,12 +22,12 @@ type action=
   | PostedRating(rating)
   | FailedPostingRating;
 
-let testData = 
+let testData = (rating) =>
   Json.Encode.(
     object_([
-      ("ownerId", string("f1b3f890-2616-11e8-b467-0ed5f89f718b")),
-      ("note", int(4)),
-      ("comment", string("Une bonne formation dans l'ensemble"))
+      ("ownerId", string(rating.ownerId)),
+      ("note", int(rating.rate)),
+      ("comment", string(rating.comment))
   ])
 );
 
@@ -82,7 +82,7 @@ let make = (~training, children) => {
         (
           self => Js.Promise.(
             Fetch.fetchWithInit("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/382461c8-9cf9-4f3d-9132-6126999c968e/notes", 
-              Fetch.RequestInit.make(~method_=Post, ~headers= Fetch.HeadersInit.makeWithArray([|("content-type", "application/json")|]),~body=Fetch.BodyInit.make @@ Js.Json.stringify(testData), ()))
+              Fetch.RequestInit.make(~method_=Post, ~headers= Fetch.HeadersInit.makeWithArray([|("content-type", "application/json")|]),~body=Fetch.BodyInit.make @@ Js.Json.stringify(testData(rating)), ()))
               |> then_(Fetch.Response.json)
               |> then_(json =>
                   json
