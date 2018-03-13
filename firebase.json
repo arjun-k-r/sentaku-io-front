@@ -1,17 +1,6 @@
 {
   "hosting": {
     "public": "public",
-    "headers": [
-      {
-        "source": "/bundle.js",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "no-store"
-          }
-        ]
-      }
-    ],
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
