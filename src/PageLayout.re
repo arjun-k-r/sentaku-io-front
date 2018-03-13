@@ -29,16 +29,7 @@ let make = _children => {
     | ShowTrainings => ReasonReact.Update({nowShowing: Trainings})
     | ShowTraining(id) => ReasonReact.Update({nowShowing: Training(id)})
     },
-  /* subscriptions: self => [
-    Sub(
-      () =>
-        ReasonReact.Router.watchUrl(url =>
-          
-        ),
-      ReasonReact.Router.unwatchUrl
-    )
-  ], */
-  render: self =>
+  render: _self =>
     <div>
       <Header />
       <div className="row content">
@@ -82,26 +73,20 @@ let make = _children => {
         /***
          * Here add the component to show depending on the state of the current layout
          */
-        /* (
-          switch self.state.nowShowing {
-          | Index => <a href="/trainings"> (str("Voir les formation")) </a>
-          | Training(id) => <Training id />
-          | Trainings => <Trainings />
-          }
-        ) */
         <Router>
-        ...(
-            (url: ReasonReact.Router.url) =>
-              <div>
-                (
-                    switch url.path {
-                        | ["trainings"] => <Trainings />
-                        | ["training", id] => <Training id/>
-                        | _ => <a href="/trainings"> (str("Voir les formation")) </a>
-                        }
-                )
-              </div>
-          )
+          ...(
+               (url: ReasonReact.Router.url) =>
+                 <div>
+                   (
+                     switch url.path {
+                     | ["trainings"] => <Trainings />
+                     | ["training", id] => <Training id />
+                     | _ =>
+                       <a href="/trainings"> (str("Voir les formation")) </a>
+                     }
+                   )
+                 </div>
+             )
         </Router>
       </div>
       <div className="col m2">

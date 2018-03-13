@@ -10,5 +10,6 @@
     "bs-webapi",
     "@glennsl/bs-json"
   ],
+  "suffix": ".bs.js",
   "sources": "src"
 }

@@ -109,7 +109,7 @@ let make = (~training, _children) => {
       <div id="test-swipe-3" className="col s12">
           <form className="col s12">
             <div className="row">
-              <div className="input-field col s20">
+              <div className="input-field col s12">
               <h5> (str("Votre note : ")) </h5>
                 <select onChange=(evt => self.send(EditedRate(int_of_string(valueFromEvent(evt)))))>
                   <option value="1">(str("1"))</option>

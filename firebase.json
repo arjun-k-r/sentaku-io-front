@@ -1,14 +1,23 @@
 {
   "hosting": {
     "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+    "headers": [
+      {
+        "source": "/bundle.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store"
+          }
+        ]
+      }
     ],
-    "rewrites": [{
-      "source": "**",
-      "destination": "/index.html"
-    }]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "!{/js,/css}/**",
+        "destination": "/index.html"
+      }
+    ]
   }
 }
