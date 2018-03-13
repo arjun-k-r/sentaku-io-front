@@ -4,7 +4,7 @@
  * US_01
  */
 open ServicesMocks;
-
+open Utils;
 open Model;
 
 open TrainingDecode;
@@ -25,6 +25,16 @@ type state = {
 
   /* Actions : Post, Posted or Failed Posting*/
 type action = 
+  | EditedTitle(string)
+  | EditedDescription(string)
+  | EditedDegreeLevel(int)
+  | EditedEtcsNumber(int)
+  | EditedDiploma(string)
+  | EditedAdmissionModalities(string)
+  | EditedLogo(string)
+  | EditedLocation(string)
+  | EditedLink(string)
+  | EditedTags(string)
   | PostTraining
   | PostedTraining(training)
   | FailedPostTraining;
@@ -39,14 +49,14 @@ Json.Encode.(
     ("title",string(training.title)),
     ("description",string(training.description)),
     ("degreeLevel",int(training.degreeLevel)),
-    ("etcsNumber",int(training.etcsNumber)),
-    ("diploma",string(training.diploma)),
+    ("etcsNumber",int(optInt(training.etcsNumber))),
+    ("diploma",string(opt(training.diploma))),
     ("admissionModalities",string(training.admissionModalities)),
     ("logo",string(training.logo)),
-    ("localisation",string(training.localisation)),
+    ("location",string(training.location)),
     ("link",string(training.link)),
-    ("tags",parseTags(training.tags) |> Json.Encode.stringArray),
-    ("ratingOverview",string(training.ratingOverview))
+    ("tags",string(optArray(training.tags))),
+    ("ratingOverview",string(""))
   ])
 );
 
@@ -61,27 +71,37 @@ let valueFromEvent = (evt) : string =>(
 let component = ReasonReact.reducerComponent("NewTraining");
 
 
-let make = (~training, children) => {
+let make = ( children) => {
   ...component,
   initialState:() =>{
     globalState:Empty,
     training:{
       id: "-1",
-      etcsNumber: Some(-1),
+      etcsNumber:None,
       title: "", 
       description:"",
       admissionModalities:"",
-      diploma:Some(""),
+      diploma:None,
       logo:"",
       degreeLevel:-1,
       location:"",
       link:"",
       tags:Some([|""|]),
-      ratingOverview:{average:Some(-1),ratings:Some([|rating|])}
+      ratingOverview:{average:None,ratings:None}
     }
   }, 
   reducer:(action,{globalState,training}) =>
     switch action{
+    | EditedTitle(title) => ReasonReact.Update({globalState, training: {...training, title}})
+    | EditedDescription(description) =>  ReasonReact.Update({globalState, training: {...training, description}})
+    | EditedDegreeLevel(degreeLevel) =>  ReasonReact.Update({globalState, training: {...training, degreeLevel}})
+    | EditedEtcsNumber(etcsNumber) =>  ReasonReact.Update({globalState, training: {...training,etcsNumber}})
+    | EditedDiploma(diploma) =>  ReasonReact.Update({globalState, training: {...training, diploma}})
+    | EditedAdmissionModalities(admissionModalities) =>  ReasonReact.Update({globalState, training: {...training, admissionModalities}})
+    | EditedLogo(logo) =>  ReasonReact.Update({globalState, training: {...training, logo}})
+    | EditedLocation(location) =>  ReasonReact.Update({globalState, training: {...training, location}})
+    | EditedLink(link) =>  ReasonReact.Update({globalState, training: {...training, link}})
+    | EditedTags(tags) =>  ReasonReact.Update({globalState, training: {...training, tags}})
     | PostTraining =>
     ReasonReact.UpdateWithSideEffects({globalState: Loading, training},
     (
@@ -110,110 +130,99 @@ let make = (~training, children) => {
         render: (self) => 
           switch self.state.globalState{
           | Empty =>
-          <div className="createTraining">
-            <div className="container page">
-              <div className="row">
-                <div className="col-md-6 offset-md-3 col-xs-12">
-                  <h1 className="text-xs-center"> (str("Creer une formation")) </h1>
-                  <form>
+                <div className="col m8 offset-m2">
+                  <h3> (str("Creer une formation")) </h3>
+                  <form className="col s12">
                     <fieldset className="form-group">
                       <input
                         _type="text"
                         className="form-control form-control-lg"
-                        placeholder="Title"
-                        value="title"
+                        placeholder="Titre" key="comment_input"
+                        onChange=(evt => self.send(EditedTitle(valueFromEvent(evt))))
+                        />
+                    </fieldset>
+                    <fieldset className="form-group">
+                      <input
+                        _type="text"
+                        className="form-control form-control-lg"
+                        placeholder="Description" key="comment_input"
+                        onChange=(evt => self.send(EditedDescription(valueFromEvent(evt))))
                       />
                     </fieldset>
                     <fieldset className="form-group">
                       <input
                         _type="text"
                         className="form-control form-control-lg"
-                        placeholder="Description"
-                        value="description"
+                        placeholder="DegreeLevel" key="comment_input" 
+                        onChange=(evt => self.send(EditedDegreeLevel(int_of_string(valueFromEvent(evt)))))
                       />
                     </fieldset>
                     <fieldset className="form-group">
                       <input
                         _type="text"
                         className="form-control form-control-lg"
-                        placeholder="degreeLevel"
-                        value="degreeLevel"
+                        placeholder="Nombre d ETCS" key="comment_input"
+                        onChange=(evt => self.send(EditedEtcsNumber(int_of_string(valueFromEvent(evt)))))
+                        
                       />
                     </fieldset>
                     <fieldset className="form-group">
                       <input
                         _type="text"
                         className="form-control form-control-lg"
-                        placeholder="etcsNumber"
-                        value="etcsNumber"
+                        placeholder="Diplome" key="comment_input"
+                        onChange=(evt => self.send(EditedDiploma(valueFromEvent(evt))))
                       />
                     </fieldset>
                     <fieldset className="form-group">
                       <input
                         _type="text"
                         className="form-control form-control-lg"
-                        placeholder="diploma"
-                        value="diploma"
+                        placeholder="Modalites d inscription" key="comment_input"
+                        onChange=(evt => self.send(EditedAdmissionModalities(valueFromEvent(evt))))
                       />
                     </fieldset>
                     <fieldset className="form-group">
                       <input
                         _type="text"
                         className="form-control form-control-lg"
-                        placeholder="admissionModalities"
-                        value="admissionModalities"
+                        placeholder="Lien du Logo" key="comment_input"
+                        onChange=(evt => self.send(EditedLogo(valueFromEvent(evt))))
                       />
                     </fieldset>
                     <fieldset className="form-group">
                       <input
                         _type="text"
                         className="form-control form-control-lg"
-                        placeholder="logo"
-                        value="logo"
+                        placeholder="Localisation" key="comment_input"
+                        onChange=(evt => self.send(EditedLocation(valueFromEvent(evt))))
                       />
                     </fieldset>
                     <fieldset className="form-group">
                       <input
                         _type="text"
                         className="form-control form-control-lg"
-                        placeholder="localisation"
-                        value="localisation"
+                        placeholder="Url vers la formation" key="comment_input"
+                        onChange=(evt => self.send(EditedLink(valueFromEvent(evt))))
                       />
                     </fieldset>
                     <fieldset className="form-group">
                       <input
                         _type="text"
                         className="form-control form-control-lg"
-                        placeholder="link"
-                        value="link"
+                        placeholder="Liste de tags" key="comment_input"
+                        onChange=(evt => self.send(EditedTags(valueFromEvent(evt))))
                       />
                     </fieldset>
-                    <fieldset className="form-group">
-                      <input
-                        _type="text"
-                        className="form-control form-control-lg"
-                        placeholder="tags,tags,tags"
-                        value="tags"
-                      />
-                    </fieldset>
-                  /*  <fieldset className="form-group">
-                      <input
-                        _type="text"
-                        className="form-control form-control-lg"
-                        placeholder="ratingOverviewTitre"
-                        value="ratingOverview"
-                      />
-                    </fieldset>*/
+                    <div className="center">
                     <button
                       onClick=(_evt => self.send(PostTraining))
                       className="btn btn-lg btn-primary pull-xs-right">
                       (str("Creer"))
                     </button>
+                    </div>
                   </form>
                 </div>
-              </div>
-            </div>
-          </div>
           | Error => <div> (str("Erreur lors de la creation de la formation.")) </div>
           | Loading => <div> (str("Chargement...")) </div>
           | Posted(training) => <div> (str("Formation envoyée !")) </div>

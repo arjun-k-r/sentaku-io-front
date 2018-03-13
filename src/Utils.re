@@ -18,3 +18,15 @@ let opt = opt =>
     | Some(value) => value
     | None => "Non renseigné"
 };
+
+let optInt= opt=>
+switch opt {
+    | Some(value) => value
+    | None => 0
+};
+
+let optArray = opt =>
+switch opt {
+| Some(value) => value[0]
+| None => ""
+}
