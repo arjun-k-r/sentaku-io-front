@@ -1,11 +1,14 @@
 {
   "name": "Sentakuio-front",
+  "bsc-flags": ["-bs-super-errors"],
   "reason": {
     "react-jsx": 2
   },
   "refmt": 3,
-  "bs-dependencies": ["reason-react"],
+  "bs-dependencies": ["reason-react",
+    "bs-fetch",
+    "bs-webapi",
+    "@glennsl/bs-json"
+  ],
   "sources": "src"
-
-
 }
