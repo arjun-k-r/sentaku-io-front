@@ -15,7 +15,11 @@ let make = (~training, _children) => {
       <div className="col m10">
         <div className="col m12">
           <span className="formation-title">
-            <a href=("training/" ++ training.id)> (str(training.title)) </a>
+            <Link 
+            href=("training/" ++ training.id) 
+            className="">
+                (str(training.title))
+            </Link>
           </span>
           <span>
             <i className="material-icons rate-stars"> (str("star_half")) </i>
