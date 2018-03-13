@@ -1,8 +1,5 @@
-open ServicesMocks;
 
 open Model;
-
-open TrainingDecode;
 
 type globalState = 
   | Empty /* No rating added yet */
@@ -60,7 +57,7 @@ module Input = {
 
 let component = ReasonReact.reducerComponent("NewRating");
 
-let make = (~training, children) => {
+let make = (~training, _children) => {
   ...component,
   initialState: () => {
     globalState: Empty, 
@@ -140,6 +137,6 @@ let make = (~training, children) => {
         </div>
       | Error => <div> (str("Impossible de poster le commentaire :( !")) </div>
       | Loading => <div> (str("Chargement de la page ...")) </div>
-      | Posted(rating) => <div>(str("Posté :) !"))</div> 
+      | Posted(_rating) => <div>(str("Posté :) !"))</div> 
     }
 };

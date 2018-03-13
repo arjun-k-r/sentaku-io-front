@@ -7,16 +7,16 @@ type page =
   | Index
   | Trainings
   | Training(string);
-  /* | NewTraining; */
 
+/* | NewTraining; */
 type state = {nowShowing: page};
 
 type action =
   | ShowIndex
   | ShowTraining(string)
   | ShowTrainings;
-  /* | ShowNewTraining; */
 
+/* | ShowNewTraining; */
 let component = ReasonReact.reducerComponent("PageLayout");
 
 let make = _children => {
@@ -32,99 +32,77 @@ let make = _children => {
   subscriptions: self => [
     Sub(
       () =>
-        ReasonReact.Router.watchUrl(url => {
+        ReasonReact.Router.watchUrl(url =>
           switch url.path {
           | ["trainings"] => self.send(ShowTrainings)
-          | ["training", id] => {
-                self.send(ShowTraining(id));
-            }
+          | ["training", id] =>
+            [%bs.debugger];
+            self.send(ShowTraining(id));
           | _ => self.send(ShowIndex)
-          };
-        }),
+          }
+        ),
       ReasonReact.Router.unwatchUrl
     )
   ],
-  render: self => {
+  render: self =>
     <div>
-        <header>
-            <nav>
-                <div className="nav-wrapper">
-                    <a href="#" className="brand-logo">(str("Sentaku.io"))</a>
-                    (
-                        ReasonReact.cloneElement(
-                            <a href="#"  className="button-collapse"><i className="material-icons">(str("menu"))</i></a>,
-                            ~props={"data-activates": "mobile-demo"},
-                            [||]
-                        )
-                    )
-                    
-                    <ul className="right hide-on-med-and-down">
-                        <li><a href="#badges">(str("FAQ"))</a></li>
-                        <li><a href="#collapsible">(str("A propos"))</a></li>
-                        <li><a href="#mobile">(str("Contact"))</a></li>
-                    </ul>
-                    <ul className="side-nav" id="mobile-demo">
-                        <li><a href="#badges">(str("FAQ"))</a></li>
-                        <li><a href="#collapsible">(str("A propos"))</a></li>
-                        <li><a href="#mobile">(str("Contact"))</a></li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-        <div className="row content">
-            <div className="">
-                <ul id="slide-out" className="col m2 side-nav fixed">
-                    <div className="brand-sidebar">
-                        <h1 className="logo-wrapper">
-                        <a className="brand-logo">
-                            <img src="images/logo.png" className="responsive-img" />
-                            <span className="logo-text"></span>
-                        </a>
-                        </h1>
-                    </div>
-                    <li>
-                        <div className="divider"></div>
-                    </li>
-                    <li className="no-padding">
-                        <a href="trainings" className="waves-effect waves-teal">(str("Formations"))</a>
-                    </li>
-                    <li>
-                        <a className="waves-effect waves-teal" href="#newtrainings">(str("Créer une formation"))</a>
-                    </li>
-
-                    <li>
-                        <a className="waves-effect waves-teal" href="#roles">(str("Liste des contacts"))</a>
-                    </li>
-                </ul>
-                (
-                    ReasonReact.cloneElement(
-                        <a href="#" className="button-collapse"><i className="material-icons">(str("menu"))</i></a>,
-                        ~props={"data-activates": "slide-out"},
-                        [||]
-                    )
-                )
+      <Header />
+      <div className="row content">
+        <div className="">
+          <ul id="slide-out" className="col m2 side-nav fixed">
+            <div className="brand-sidebar">
+              <h1 className="logo-wrapper">
+                <a className="brand-logo">
+                  <img src="images/logo.png" className="responsive-img" />
+                  <span className="logo-text" />
+                </a>
+              </h1>
             </div>
-
-            /**
-             * Here add the component to show depending on the state of the current layout
-             */
-            (
-                switch self.state.nowShowing {
-                    | Index => <a href="/trainings"> (str("Voir les formation")) </a>
-                    | Training(id) => <Training id/>
-                    | Trainings => <Trainings />
-                }
+            <li> <div className="divider" /> </li>
+            <li className="no-padding">
+              <a href="trainings" className="waves-effect waves-teal">
+                (str("Formations"))
+              </a>
+            </li>
+            <li>
+              <a className="waves-effect waves-teal" href="#newtrainings">
+                (str("Cr\195\169er une formation"))
+              </a>
+            </li>
+            <li>
+              <a className="waves-effect waves-teal" href="#roles">
+                (str("Liste des contacts"))
+              </a>
+            </li>
+          </ul>
+          (
+            ReasonReact.cloneElement(
+              <a href="#" className="button-collapse">
+                <i className="material-icons"> (str("menu")) </i>
+              </a>,
+              ~props={"data-activates": "slide-out"},
+              [||]
             )
+          )
         </div>
-
-        <div className="col m2">
-            <div className="col m12 pub">
-                <img src="images/pub1.jpg" className="responsive-img" />
-            </div>
-            <div className="col m12 pub">
-                <img src="images/pub2.jpg" className="responsive-img" />
-            </div>
+        /***
+         * Here add the component to show depending on the state of the current layout
+         */
+        (
+          switch self.state.nowShowing {
+          | Index => <a href="/trainings"> (str("Voir les formation")) </a>
+          | Training(id) => <Training id />
+          | Trainings => <Trainings />
+          }
+        )
+      </div>
+      <div className="col m2">
+        <div className="col m12 pub">
+          <img src="images/pub1.jpg" className="responsive-img" />
         </div>
+        <div className="col m12 pub">
+          <img src="images/pub2.jpg" className="responsive-img" />
+        </div>
+      </div>
     </div>
-  }
 };

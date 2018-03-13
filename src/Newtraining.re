@@ -9,4 +9,4 @@ open Model;
 
 let component = ReasonReact.statelessComponent("NewTraining");
 
-let make = children => {...component, render: self => <div />};
+let make = _children => {...component, render: _self => <div />};

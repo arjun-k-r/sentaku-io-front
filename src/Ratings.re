@@ -1,13 +1,11 @@
-open ServicesMocks;
 
 open Model;
-open Rating;
 
 let component = ReasonReact.statelessComponent("Ratings");
 
-let make = (~training, children) => {
+let make = (~training, _children) => {
     ...component,
-  render: self =>
+  render: _self =>
     <div id="test-swipe-2" className="col s12">
       (
         switch(training.ratingOverview.ratings) {
