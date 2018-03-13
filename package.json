@@ -1,6 +1,8 @@
 {
   "name": "sentaku-io-front",
   "scripts": {
+    "firebase": "firebase serve",
+    "webpack:watch": "webpack-dev-server --hot --mode development",
     "start": "bsb -make-world -w",
     "build:bsb": "bsb -make-world",
     "build:webpack": "webpack --mode development",
@@ -19,6 +21,7 @@
     "webpack-cli": "^2.0.11"
   },
   "devDependencies": {
-    "bs-platform": "^2.2.2"
+    "bs-platform": "^2.2.2",
+    "webpack-dev-server": "^3.1.1"
   }
 }

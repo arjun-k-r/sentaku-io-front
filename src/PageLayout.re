@@ -6,14 +6,14 @@ open Model;
 type page =
   | Index
   | Trainings
-  | Training;
+  | Training(string);
   /* | NewTraining; */
 
 type state = {nowShowing: page};
 
 type action =
   | ShowIndex
-  | ShowTraining
+  | ShowTraining(string)
   | ShowTrainings;
   /* | ShowNewTraining; */
 
@@ -27,18 +27,20 @@ let make = _children => {
     /* router actions */
     | ShowIndex => ReasonReact.Update({nowShowing: Index})
     | ShowTrainings => ReasonReact.Update({nowShowing: Trainings})
-    | ShowTraining => ReasonReact.Update({nowShowing: Training})
+    | ShowTraining(id) => ReasonReact.Update({nowShowing: Training(id)})
     },
   subscriptions: self => [
     Sub(
       () =>
-        ReasonReact.Router.watchUrl(url =>
-          switch url.hash {
-          | "trainings" => self.send(ShowTrainings)
-          | "training" => self.send(ShowTraining)
+        ReasonReact.Router.watchUrl(url => {
+          switch url.path {
+          | ["trainings"] => self.send(ShowTrainings)
+          | ["training", id] => {
+                self.send(ShowTraining(id));
+            }
           | _ => self.send(ShowIndex)
-          }
-        ),
+          };
+        }),
       ReasonReact.Router.unwatchUrl
     )
   ],
@@ -57,14 +59,14 @@ let make = _children => {
                     )
                     
                     <ul className="right hide-on-med-and-down">
-                        <li><a href="badges.html">(str("FAQ"))</a></li>
-                        <li><a href="collapsible.html">(str("A propos"))</a></li>
-                        <li><a href="mobile.html">(str("Contact"))</a></li>
+                        <li><a href="#badges">(str("FAQ"))</a></li>
+                        <li><a href="#collapsible">(str("A propos"))</a></li>
+                        <li><a href="#mobile">(str("Contact"))</a></li>
                     </ul>
                     <ul className="side-nav" id="mobile-demo">
-                        <li><a href="badges.html">(str("FAQ"))</a></li>
-                        <li><a href="collapsible.html">(str("A propos"))</a></li>
-                        <li><a href="mobile.html">(str("Contact"))</a></li>
+                        <li><a href="#badges">(str("FAQ"))</a></li>
+                        <li><a href="#collapsible">(str("A propos"))</a></li>
+                        <li><a href="#mobile">(str("Contact"))</a></li>
                     </ul>
                 </div>
             </nav>
@@ -75,7 +77,7 @@ let make = _children => {
                     <div className="brand-sidebar">
                         <h1 className="logo-wrapper">
                         <a className="brand-logo">
-                            <img src="../public/images/logo.png" className="responsive-img" />
+                            <img src="images/logo.png" className="responsive-img" />
                             <span className="logo-text"></span>
                         </a>
                         </h1>
@@ -84,7 +86,7 @@ let make = _children => {
                         <div className="divider"></div>
                     </li>
                     <li className="no-padding">
-                        <a href="#trainings" className="waves-effect waves-teal">(str("Formations"))</a>
+                        <a href="trainings" className="waves-effect waves-teal">(str("Formations"))</a>
                     </li>
                     <li>
                         <a className="waves-effect waves-teal" href="#newtrainings">(str("Créer une formation"))</a>
@@ -108,8 +110,8 @@ let make = _children => {
              */
             (
                 switch self.state.nowShowing {
-                    | Index => <a href="#trainings"> (str("Voir les formation")) </a>
-                    | Training => <Training />
+                    | Index => <a href="/trainings"> (str("Voir les formation")) </a>
+                    | Training(id) => <Training id/>
                     | Trainings => <Trainings />
                 }
             )
@@ -117,10 +119,10 @@ let make = _children => {
 
         <div className="col m2">
             <div className="col m12 pub">
-                <img src="../public/images/pub1.jpg" className="responsive-img" />
+                <img src="images/pub1.jpg" className="responsive-img" />
             </div>
             <div className="col m12 pub">
-                <img src="../public/images/pub2.jpg" className="responsive-img" />
+                <img src="images/pub2.jpg" className="responsive-img" />
             </div>
         </div>
     </div>

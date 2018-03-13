@@ -142,5 +142,4 @@ let make = (~training, children) => {
       | Loading => <div> (str("Chargement de la page ...")) </div>
       | Posted(rating) => <div>(str("Posté :) !"))</div> 
     }
-    
 };

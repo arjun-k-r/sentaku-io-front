@@ -21,9 +21,9 @@ module TrainingHeader = {
     };
 
   let component = ReasonReact.statelessComponent("TrainingHeader");
-  let make = (~training, children) => {
+  let make = (~training, _children) => {
       ...component,
-      render: self =>
+      render: _self =>
           <div className="col m12 card">
               <div className="col m3">
               <img src=(training.logo) className="responsive-img" />
@@ -80,9 +80,9 @@ module TrainingHeader = {
 */
 module TrainingFooter = {
   let component = ReasonReact.statelessComponent("TrainingFooter");
-  let make = (~training, children) => {
+  let make = (~training, _children) => {
     ...component,
-    render: self =>
+    render: _self =>
       <div className="col m12 card">
         <div className="col m12">
           <ul id="tabs-swipe-demo" className="tabs">
@@ -123,7 +123,7 @@ type action =
   | TrainingFetched(training)
   | TrainingFailedToFetch;
 let component = ReasonReact.reducerComponent("Training");
-let make = _children => {
+let make = (~id, _children) => {
   ...component,
   initialState: _state => Loading,
   reducer: (action, _state) => 
@@ -134,7 +134,7 @@ let make = _children => {
           (
             self =>
               Js.Promise.(
-                Fetch.fetch("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/382461c8-9cf9-4f3d-9132-6126999c968e")
+                Fetch.fetch("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/"++ id)
                 |> then_(Fetch.Response.json)
                 |> then_(json =>
                     json
@@ -162,14 +162,14 @@ let make = _children => {
   },
   render: (self) =>
     switch self.state {
-    | Error => <div> (str("Nous n'arrivons pas à récupérer la formation :( !")) </div>
-    | Loading => <div> (str("Chargement de la page ...")) </div>
-    | Loaded(training) =>
-      <div className="row content">
-        <div className="col m8 offset-m2">
-          <TrainingHeader training/>
-          <TrainingFooter training/>
+      | Error => <div> (str("Nous n'arrivons pas à récupérer la formation :( !")) </div>
+      | Loading => <div> (str("Chargement de la page ...")) </div>
+      | Loaded(training) =>
+        <div className="row content">
+          <div className="col m8 offset-m2">
+            <TrainingHeader training/>
+            <TrainingFooter training/>
+          </div>
         </div>
-      </div>
     }
 };
