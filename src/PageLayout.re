@@ -45,7 +45,7 @@ let make = _children => {
             </div>
             <li> <div className="divider" /> </li>
             <li className="no-padding">
-              <a href="trainings" className="waves-effect waves-teal">
+              <a href="/trainings" className="waves-effect waves-teal">
                 (str("Formations"))
               </a>
             </li>
