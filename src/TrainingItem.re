@@ -16,7 +16,7 @@ let make = (~training, _children) => {
         <div className="col m12">
           <span className="formation-title">
             <Link 
-            href=("training/" ++ training.id) 
+            href=("/training/" ++ training.id) 
             className="">
                 (str(training.title))
             </Link>

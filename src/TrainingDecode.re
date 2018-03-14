@@ -1,20 +1,13 @@
 open Model;
 
+open RatingDecode;
+
 type response = {training};
 
 /** Multiple training response */
 type multTrResponse = { 
     trainings: array(training)
 };
-
-let parseRating = json =>
-  Json.Decode.{
-    id: json |> field("id", int),
-    ownerId: json |> field("ownerId", string),
-    rate: json |> field("rate", int),
-    comment: json |> field("comment", string),
-    trainingId: json |> field("trainingId", string)
-  };
 
 let parseRatings = json =>
   json |> Json.Decode.array(parseRating) |> Array.map(rating => rating);
@@ -25,7 +18,7 @@ let parseNotesOverview = json =>
     ratings: json |> optional(field("notes", parseRatings))
   };
 
-let parseTr = json =>
+let parseTraining = json =>
   Json.Decode.{
     id: json |> field("id", string),
     title: json |> field("title", string),
@@ -42,11 +35,11 @@ let parseTr = json =>
   };
 
   let parseTrainings = json =>
-    json |> Json.Decode.array(parseTr) |> Array.map(training => training);
+    json |> Json.Decode.array(parseTraining) |> Array.map(training => training);
 
 
 let training = json =>
-  Json.Decode.{training: json |> field("training", parseTr)};
+  Json.Decode.{training: json |> field("training", parseTraining)};
 
 let trainings = json =>
   Json.Decode.{trainings: json |> field("trainings", parseTrainings)};
