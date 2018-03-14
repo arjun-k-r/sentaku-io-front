@@ -36,3 +36,5 @@ type training = {
 };
 
 let str = ReasonReact.stringToElement;
+
+let apiUrl = "https://sentaku-api-prod.herokuapp.com/api/v1/";

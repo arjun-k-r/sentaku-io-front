@@ -134,7 +134,7 @@ let make = (~id, _children) => {
           (
             self =>
               Js.Promise.(
-                Fetch.fetch("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/"++ id)
+                Fetch.fetch(apiUrl ++ "trainings/"++ id)
                 |> then_(Fetch.Response.json)
                 |> then_(json =>
                     json

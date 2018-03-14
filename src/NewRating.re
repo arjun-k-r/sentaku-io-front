@@ -77,7 +77,7 @@ let make = (~training, _children) => {
       ReasonReact.UpdateWithSideEffects({globalState: Loading, rating}, 
         (
           self => Js.Promise.(
-            Fetch.fetchWithInit("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/" ++ training.id ++ "/notes", 
+            Fetch.fetchWithInit(apiUrl ++"trainings/" ++ training.id ++ "/notes", 
               Fetch.RequestInit.make(~method_=Post, ~headers= Fetch.HeadersInit.makeWithArray([|("content-type", "application/json")|]),~body=Fetch.BodyInit.make @@ Js.Json.stringify(encodeRating(rating)), ()))
               |> then_(Fetch.Response.json)
               |> then_(json =>

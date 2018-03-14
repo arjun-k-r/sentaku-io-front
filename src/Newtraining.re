@@ -3,9 +3,6 @@
  *
  * US_01
  */
-open ServicesMocks;
-
-open Model;
 
 let component = ReasonReact.statelessComponent("NewTraining");
 
