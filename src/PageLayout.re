@@ -73,28 +73,30 @@ let make = _children => {
         /***
          * Here add the component to show depending on the state of the current layout
          */
-        <Router>
-          ...(
-               (url: ReasonReact.Router.url) =>
-                 <div>
-                   (
-                     switch url.path {
-                     | ["trainings"] => <Trainings />
-                     | ["training", id] => <Training id />
-                     | _ =>
-                       <a href="/trainings"> (str("Voir les formation")) </a>
-                     }
-                   )
-                 </div>
-             )
-        </Router>
-      </div>
-      <div className="col m2">
-        <div className="col m12 pub">
-          <img src="images/pub1.jpg" className="responsive-img" />
+        <div className="col m8 offset-m2">
+          <Router>
+            ...(
+                 (url: ReasonReact.Router.url) =>
+                   <div>
+                     (
+                       switch url.path {
+                       | ["trainings"] => <Trainings />
+                       | ["training", id] => <Training id />
+                       | _ =>
+                         <a href="/trainings"> (str("Voir les formation")) </a>
+                       }
+                     )
+                   </div>
+               )
+          </Router>
         </div>
-        <div className="col m12 pub">
-          <img src="images/pub2.jpg" className="responsive-img" />
+        <div className="col m2">
+          <div className="col m12 pub">
+            <img src="images/pub1.jpg" className="responsive-img" />
+          </div>
+          <div className="col m12 pub">
+            <img src="images/pub2.jpg" className="responsive-img" />
+          </div>
         </div>
       </div>
     </div>
