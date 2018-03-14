@@ -51,7 +51,7 @@ let make = _children => {
             </li>
             <li>
               <a className="waves-effect waves-teal" href="#newtrainings">
-                (str("Cr\195\169er une formation"))
+                (str("Créer une formation"))
               </a>
             </li>
             <li>
