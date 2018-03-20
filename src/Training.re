@@ -21,9 +21,9 @@ module TrainingHeader = {
     };
 
   let component = ReasonReact.statelessComponent("TrainingHeader");
-  let make = (~training, children) => {
+  let make = (~training, _children) => {
       ...component,
-      render: self =>
+      render: _self =>
           <div className="col m12 card">
               <div className="col m3">
               <img src=(training.logo) className="responsive-img" />
@@ -33,7 +33,7 @@ module TrainingHeader = {
                   <h1 className="formation-title">(str(training.title))</h1>
               </div>
               <div className="col m12 center">
-              <a src=(training.link)>(str("Lien du site"))</a>
+              <a href=(training.link)>(str("Lien du site"))</a>
               </div>
               <div className="col m12 center">
                   (str("Localisation géographique : " ++ training.location))
@@ -46,7 +46,7 @@ module TrainingHeader = {
                   <div className="col m4"> (str("Niveau d'étude : " ++ string_of_int(training.degreeLevel))) </div>
               </div>
               <div className="col m12 center">
-                  <div className="col m6"> (str("Moyenne des notes : " ++ optIntStr(training.ratingOverview.average))) </div>
+                  <div className="col m6"> (str("Moyenne des notes : " ++ optFloatStr(training.ratingOverview.average))) </div>
                   <div className="col m6"> (str("Diplôme délivré : " ++ opt(training.diploma))) </div>
               </div>
               <div className="col m12 list-tags">
@@ -80,9 +80,9 @@ module TrainingHeader = {
 */
 module TrainingFooter = {
   let component = ReasonReact.statelessComponent("TrainingFooter");
-  let make = (~training, children) => {
+  let make = (~training, _children) => {
     ...component,
-    render: self =>
+    render: _self =>
       <div className="col m12 card">
         <div className="col m12">
           <ul id="tabs-swipe-demo" className="tabs">
@@ -106,7 +106,7 @@ module TrainingFooter = {
         </div>
           <Description training/>
           <Ratings training/>
-          /* <Newrating /> */
+          <NewRating training/> 
       </div>
   };
 };
@@ -123,7 +123,7 @@ type action =
   | TrainingFetched(training)
   | TrainingFailedToFetch;
 let component = ReasonReact.reducerComponent("Training");
-let make = _children => {
+let make = (~id, _children) => {
   ...component,
   initialState: _state => Loading,
   reducer: (action, _state) => 
@@ -134,7 +134,7 @@ let make = _children => {
           (
             self =>
               Js.Promise.(
-                Fetch.fetch("https://sentaku-api-prod.herokuapp.com/api/v1/trainings/382461c8-9cf9-4f3d-9132-6126999c968e")
+                Fetch.fetch(apiUrl ++ "trainings/"++ id)
                 |> then_(Fetch.Response.json)
                 |> then_(json =>
                     json
@@ -162,14 +162,14 @@ let make = _children => {
   },
   render: (self) =>
     switch self.state {
-    | Error => <div> (str("Nous n'arrivons pas à récupérer la formation :( !")) </div>
-    | Loading => <div> (str("Chargement de la page ...")) </div>
-    | Loaded(training) =>
-      <div className="row content">
-        <div className="col m8 offset-m2">
-          <TrainingHeader training/>
-          <TrainingFooter training/>
+      | Error => <div> (str("Nous n'arrivons pas à récupérer la formation :( !")) </div>
+      | Loading => <div> (str("Chargement de la page ...")) </div>
+      | Loaded(training) =>
+        <div className="row content">
+          <div className="col m8 offset-m2">
+            <TrainingHeader training/>
+            <TrainingFooter training/>
+          </div>
         </div>
-      </div>
     }
 };

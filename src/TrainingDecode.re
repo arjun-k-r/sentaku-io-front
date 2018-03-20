@@ -44,3 +44,6 @@ let training = json =>
     Json.Decode.{
         training: json |> field("training", parseTr)
     };
+
+let trainings = json =>
+Json.Decode.{trainings: json |> field("trainings", parseTrainings)};

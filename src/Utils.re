@@ -13,20 +13,22 @@ switch opt {
     | Some(value) => string_of_int(value)
     | None => "Non renseigné"
 };
+
 let opt = opt =>
     switch opt {
     | Some(value) => value
     | None => "Non renseigné"
 };
 
-let optInt= opt=>
+let optInt= opt =>
 switch opt {
     | Some(value) => value
     | None => 0
 };
 
+
 let optArray = opt =>
 switch opt {
 | Some(value) => value[0]
 | None => ""
-}
+};

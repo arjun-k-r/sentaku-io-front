@@ -1,4 +1,7 @@
 /**
  * Entry point of the app
+
  */
-ReactDOMRe.renderToElementWithId(<NewTraining />, "root");
+ReactDOMRe.renderToElementWithId(<PageLayout />, "root");
+
+ReasonReact.Router.push("");
