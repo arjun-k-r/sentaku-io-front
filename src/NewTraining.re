@@ -28,13 +28,13 @@ type action =
   | EditedTitle(string)
   | EditedDescription(string)
   | EditedDegreeLevel(int)
-  | EditedEtcsNumber(int)
-  | EditedDiploma(string)
+  | EditedEtcsNumber(option(int))
+  | EditedDiploma(option(string))
   | EditedAdmissionModalities(string)
   | EditedLogo(string)
   | EditedLocation(string)
   | EditedLink(string)
-  | EditedTags(string)
+  | EditedTags(option(array(string)))
   | PostTraining
   | PostedTraining(training)
   | FailedPostTraining;
@@ -83,10 +83,10 @@ let make = ( children) => {
       admissionModalities:"",
       diploma:None,
       logo:"",
-      degreeLevel:-1,
+      degreeLevel:0,
       location:"",
       link:"",
-      tags:Some([|""|]),
+      tags:None,
       ratingOverview:{average:None,ratings:None}
     }
   }, 
@@ -95,7 +95,7 @@ let make = ( children) => {
     | EditedTitle(title) => ReasonReact.Update({globalState, training: {...training, title}})
     | EditedDescription(description) =>  ReasonReact.Update({globalState, training: {...training, description}})
     | EditedDegreeLevel(degreeLevel) =>  ReasonReact.Update({globalState, training: {...training, degreeLevel}})
-    | EditedEtcsNumber(etcsNumber) =>  ReasonReact.Update({globalState, training: {...training,etcsNumber}})
+    | EditedEtcsNumber(etcsNumber) =>  ReasonReact.Update({globalState, training: {...training, etcsNumber }})
     | EditedDiploma(diploma) =>  ReasonReact.Update({globalState, training: {...training, diploma}})
     | EditedAdmissionModalities(admissionModalities) =>  ReasonReact.Update({globalState, training: {...training, admissionModalities}})
     | EditedLogo(logo) =>  ReasonReact.Update({globalState, training: {...training, logo}})
@@ -133,7 +133,7 @@ let make = ( children) => {
                 <div className="col m8 offset-m2">
                   <h3> (str("Creer une formation")) </h3>
                   <form className="col s12">
-                    <fieldset className="form-group">
+                    <fieldset className="form-group"> 
                       <input
                         _type="text"
                         className="form-control form-control-lg"
@@ -162,7 +162,15 @@ let make = ( children) => {
                         _type="text"
                         className="form-control form-control-lg"
                         placeholder="Nombre d ETCS" key="comment_input"
-                        onChange=(evt => self.send(EditedEtcsNumber(int_of_string(valueFromEvent(evt)))))
+                        onChange=(evt => {
+                          let etcs = valueFromEvent(evt);
+                          let etcsInt = switch etcs {
+                          | "" => None
+                          | _ => Some(int_of_string(etcs))
+                          };
+
+                          self.send(EditedEtcsNumber(etcsInt))
+                        })
                         
                       />
                     </fieldset>
@@ -171,7 +179,14 @@ let make = ( children) => {
                         _type="text"
                         className="form-control form-control-lg"
                         placeholder="Diplome" key="comment_input"
-                        onChange=(evt => self.send(EditedDiploma(valueFromEvent(evt))))
+                        onChange=(evt => {
+                          let diploma = valueFromEvent(evt);
+                          let diplomaStr = switch diploma {
+                          | "" => None
+                          | _ => Some(diploma)
+                          };
+                          self.send(EditedDiploma(diplomaStr));
+                        }) 
                       />
                     </fieldset>
                     <fieldset className="form-group">
@@ -211,7 +226,16 @@ let make = ( children) => {
                         _type="text"
                         className="form-control form-control-lg"
                         placeholder="Liste de tags" key="comment_input"
-                        onChange=(evt => self.send(EditedTags(valueFromEvent(evt))))
+                        onChange=(evt => {
+                          let tags = valueFromEvent(evt);
+                          let tagsArray =
+                           switch tags{
+                          | "" => None
+                          | _ => None
+                          };
+                      
+                          self.send(EditedTags(tagsArray));
+                        })
                       />
                     </fieldset>
                     <div className="center">
@@ -223,8 +247,9 @@ let make = ( children) => {
                     </div>
                   </form>
                 </div>
+
           | Error => <div> (str("Erreur lors de la creation de la formation.")) </div>
           | Loading => <div> (str("Chargement...")) </div>
           | Posted(training) => <div> (str("Formation envoyée !")) </div>
           }
-};
+        };
