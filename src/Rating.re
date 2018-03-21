@@ -12,7 +12,7 @@ let component = ReasonReact.statelessComponent("Rating");
 let make = (~rating, _children) => {...component, render: _self => 
     <div className="col m12">
         <div className="col m1">
-          <img src="images/myAvatar.png" className="circle responsive-img" />
+          <img src="/images/myAvatar.png" className="circle responsive-img" />
         </div>
         <div className="col m10 commentaire">
           <h6> (str("Deleplanque Dylan")) </h6>
