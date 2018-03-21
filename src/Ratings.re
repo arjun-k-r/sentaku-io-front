@@ -6,24 +6,28 @@ let component = ReasonReact.statelessComponent("Ratings");
 let make = (~training, _children) => {
     ...component,
   render: _self =>
-    <div id="test-swipe-2" className="col s12">
+    <div id="test-swipe-2" className="row">
       (
         switch(training.ratingOverview.ratings) {
           | Some(ratings) => 
-          if(Array.length(ratings) === 0) {
-            str("Aucune note")
-          } else {
-            ReasonReact.arrayToElement(Array.map(
-              (rating : rating) =>
-                <Rating
-                  key=(string_of_int(rating.id))
-                  rating
-                />,
-              ratings
-            ))
+            [%bs.debugger];
+            if(Array.length(ratings) === 0) {
+              str("Aucune note")
+            } else {
+              ReasonReact.arrayToElement(Array.map(
+                (rating : rating) =>
+                  <Rating
+                    key=(rating.id)
+                    rating
+                  />,
+                ratings
+              ))
 
+            }
+          | None => {
+            [%bs.debugger];
+            str("Aucune note");
           }
-          | None => str("Aucune note")
         }
       )
     </div>

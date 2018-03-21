@@ -32,3 +32,11 @@ switch opt {
 | Some(value) => value[0]
 | None => ""
 };
+
+
+let optFloatStr = opt=>
+switch opt {
+    | Some(value) => string_of_float(value)
+    | None => "Non renseigné"
+};
+

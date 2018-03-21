@@ -49,14 +49,14 @@ Json.Encode.(
     ("title",string(training.title)),
     ("description",string(training.description)),
     ("degreeLevel",int(training.degreeLevel)),
-    ("etcsNumber",int(optInt(training.etcsNumber))),
+    ("ETCSNumber",int(optInt(training.etcsNumber))),
     ("diploma",string(opt(training.diploma))),
     ("admissionModalities",string(training.admissionModalities)),
     ("logo",string(training.logo)),
     ("location",string(training.location)),
     ("link",string(training.link)),
-    ("tags",string(optArray(training.tags))),
-    ("ratingOverview",string(""))
+    ("tags",string(optArray(training.tags))) /**,
+    ("ratingOverview",string(""))*/
   ])
 );
 
@@ -68,7 +68,7 @@ let valueFromEvent = (evt) : string =>(
 )##value;
 
 /** component */
-let component = ReasonReact.reducerComponent("NewTraining");
+let component = ReasonReact.reducerComponent("Newtraining");
 
 
 let make = ( children) => {
@@ -106,7 +106,7 @@ let make = ( children) => {
     ReasonReact.UpdateWithSideEffects({globalState: Loading, training},
     (
       self => Js.Promise.(
-        Fetch.fetchWithInit("http://sentaku-api-prod.herokuapp.com/api/v1/training",
+        Fetch.fetchWithInit(apiUrl ++ "training",
           Fetch.RequestInit.make(~method_=Post, ~headers = Fetch.HeadersInit.makeWithArray([|("content-type","application/json")|]),~body=Fetch.BodyInit.make @@ Js.Json.stringify(data(training)), ()))
           |> then_(Fetch.Response.json)
           |> then_(json =>
