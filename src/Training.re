@@ -7,6 +7,7 @@ open Model;
 open Utils;
 open TrainingDecode;
 
+
 /**
 * This module shows the training infos
 */
@@ -84,7 +85,7 @@ module TrainingFooter = {
     ...component,
     render: _self =>
       <div className="col m12 card">
-        <div className="col m12">
+        /* <div className="col m12">
           <ul id="tabs-swipe-demo" className="tabs">
             <li className="tab col s4">
                 <a className="active" href="#test-swipe-1">
@@ -103,10 +104,10 @@ module TrainingFooter = {
             </li>
             <li className="indicator" />
           </ul>
-        </div>
-          <Description training/>
-          <Ratings training/>
-          <NewRating training/> 
+        </div> */
+        <Description training/>
+        <NewRating training/> 
+        <Ratings training/>
       </div>
   };
 };
@@ -133,6 +134,8 @@ let make = (~id, _children) => {
           Loading,
           (
             self =>
+            {
+              [%bs.debugger];
               Js.Promise.(
                 Fetch.fetch(apiUrl ++ "trainings/"++ id)
                 |> then_(Fetch.Response.json)
@@ -151,6 +154,7 @@ let make = (~id, _children) => {
                   )
                 |> ignore
               )
+                  }
           )
         )
       | TrainingFetched(training) => ReasonReact.Update(Loaded(training))
@@ -166,7 +170,7 @@ let make = (~id, _children) => {
       | Loading => <div> (str("Chargement de la page ...")) </div>
       | Loaded(training) =>
         <div className="row content">
-          <div className="col m8 offset-m2">
+          <div className="row">
             <TrainingHeader training/>
             <TrainingFooter training/>
           </div>

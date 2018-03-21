@@ -59,7 +59,6 @@ let make = _children => {
     | Loading => <div> (str("Chargement de la page ...")) </div>
     | Loaded(trainings) =>
       <div className="row content">
-        <div className="col m8 offset-m2">
         (
           ReasonReact.arrayToElement(Array.map(
               (training : training) =>
@@ -70,7 +69,6 @@ let make = _children => {
               trainings
             ))
         )
-        </div>
       </div>
     }
 };

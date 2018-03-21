@@ -1,5 +1,4 @@
 open Model;
-
 open RatingDecode;
 
 type response = {training};
@@ -38,8 +37,10 @@ let parseTraining = json =>
     json |> Json.Decode.array(parseTraining) |> Array.map(training => training);
 
 
-let training = json =>
+let training = json => {
+  [%bs.debugger];
   Json.Decode.{training: json |> field("training", parseTraining)};
+};
 
 let trainings = json =>
   Json.Decode.{trainings: json |> field("trainings", parseTrainings)};

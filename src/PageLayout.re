@@ -51,7 +51,7 @@ let make = _children => {
             </li>
             <li>
               <a className="waves-effect waves-teal" href="#newtrainings">
-                (str("Créer une formation"))
+                (str("Creer une formation"))
               </a>
             </li>
             <li>
@@ -80,10 +80,8 @@ let make = _children => {
                    <div>
                      (
                        switch url.path {
-                       | ["trainings"] => <Trainings />
                        | ["training", id] => <Training id />
-                       | _ =>
-                         <a href="/trainings"> (str("Voir les formation")) </a>
+                       | _ => <Trainings />
                        }
                      )
                    </div>
