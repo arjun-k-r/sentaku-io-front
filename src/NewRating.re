@@ -62,7 +62,7 @@ let make = (~training, _children) => {
   initialState: () => {
     globalState: Empty, 
     rating:{
-      id: -1,
+      id: "",
       ownerId: "f1b3f890-2616-11e8-b467-0ed5f89f718b",
       rate: 1,
       comment: "",

@@ -6,9 +6,9 @@ type response = {
 
 let parseRating = json =>
     Json.Decode.{
-        id: json |> field("id", int),
+        id: json |> field("id", string),
         ownerId: json |> field("ownerId", string),
-        rate: json |> field("rate", int),
+        rate: json |> field("note", int),
         comment: json |> field("comment", string),
         trainingId: json |> field("trainingId", string)
     };

@@ -13,7 +13,7 @@ let make = (~training, _children) => {
         <img src=training.logo className="responsive-img" />
       </div>
       <div className="col m10">
-        <div className="col m12">
+        <div className="row">
           <span className="formation-title">
             <Link 
             href=("/training/" ++ training.id) 
@@ -37,7 +37,7 @@ let make = (~training, _children) => {
             <i className="material-icons rate-stars"> (str("star")) </i>
           </span>
         </div>
-        <div className="col m12">
+        <div className="row">
           <p className="formation-description">
             (str(training.description))
           </p>

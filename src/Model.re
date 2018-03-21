@@ -6,7 +6,7 @@
  * This type defines a training rating (note)
  */
 type rating = {
-  id: int,
+  id: string,
   ownerId: string,
   rate: int, /* la note */
   comment: string,
