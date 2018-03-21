@@ -25,3 +25,9 @@ let opt = opt =>
     | Some(value) => value
     | None => "Non renseigné"
 };
+
+let optArr = opt =>
+switch opt {
+| Some(value) => value
+| None => [||]
+};
