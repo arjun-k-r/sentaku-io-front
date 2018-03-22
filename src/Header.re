@@ -22,6 +22,7 @@ let make = _children => {
             <li> <a href="#badges"> (str("FAQ")) </a> </li>
             <li> <a href="#collapsible"> (str("A propos")) </a> </li>
             <li> <a href="#mobile"> (str("Contact")) </a> </li>
+            <li> <a href="/login"> (str("Se connecter")) </a> </li>
           </ul>
           <ul className="side-nav" id="mobile-demo">
             <li> <a href="#badges"> (str("FAQ")) </a> </li>

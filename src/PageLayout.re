@@ -6,7 +6,9 @@ open Model;
 type page =
   | Index
   | Trainings
-  | Training(string);
+  | Training(string)
+  | Login
+  | Register;
 
 /* | NewTraining; */
 type state = {nowShowing: page};
@@ -81,6 +83,8 @@ let make = _children => {
                      (
                        switch url.path {
                        | ["training", id] => <Training id />
+                       | ["login"] => <Login/>
+                       | ["register"] => <Register/>
                        | _ => <Trainings />
                        }
                      )
