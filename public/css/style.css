@@ -198,3 +198,13 @@ select {
   opacity: 100!important;
   pointer-events:inherit!important;
 }
+
+.margin-left {
+  margin-left:30%;
+}
+
+.little-content {
+  width:50%;
+  margin-left:auto;
+  margin-right: auto;
+}
