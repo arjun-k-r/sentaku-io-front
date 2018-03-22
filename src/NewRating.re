@@ -59,7 +59,7 @@ module Input = {
   };
 };
 
-let getRating = training => {
+let getRating : training => rating = training => {
   [%bs.debugger];
   switch(List.filter(
     (rating) => rating.trainingId === training.id,

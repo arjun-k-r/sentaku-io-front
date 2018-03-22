@@ -3,7 +3,9 @@
  *
  * US_06
  */
+open FirebaseConfig;
 open Model;
+open UserDecode;
 open TrainingDecode;
 
 type state =
@@ -46,7 +48,15 @@ let make = _children => {
               )
           )
         )
-      | TrainingsFetched(training) => ReasonReact.Update(Loaded(training))
+      | TrainingsFetched(training) => {
+        [%bs.debugger];
+        BsFirebase.ReasonFirebase.Auth.signInAndRetrieveDataWithEmailAndPassword(auth,~email="maws@test.fr", ~password="songoku")
+        |> Js.Promise.then_(
+          (user) => Js.log(user)
+          |> Js.Promise.resolve
+        );
+        ReasonReact.Update(Loaded(training))
+      }
       | TrainingFailedToFetch => ReasonReact.Update(Error)
     },
   didMount: self => {
