@@ -35,6 +35,23 @@ type training = {
   ratingOverview: ratingOverview
 };
 
+/**
+ * When logged in
+ */
+type user = {
+  id: string,
+  email: string,
+  token: string
+};
+
+/**
+ * To login
+ */
+type credential = {
+  email: string,
+  password: string
+};
+
 let str = ReasonReact.stringToElement;
 
-let apiUrl = "https://sentaku-api-dev.herokuapp.com/api/v1/";
+let apiUrl = "https://sentaku-api-prod.herokuapp.com/api/v1/";
