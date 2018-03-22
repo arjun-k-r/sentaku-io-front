@@ -6,7 +6,8 @@ type globalState =
   | Empty /* No rating added yet */
   | Loading
   | Error
-  | Posted(rating);
+  | Posted(rating)
+  | Modified(rating);
 
 type state = {
   globalState: globalState,
@@ -19,6 +20,7 @@ type action=
   | PostRating
   | ModifyRating
   | PostedRating(rating)
+  | ModifiedRating(rating)
   | FailedPostingRating;
 
 /**
@@ -128,7 +130,7 @@ let make = (~training, _children) => {
                   Js.log(training);
                   training
                 }) */
-                |> (rating => self.send(PostedRating(rating.rating)))
+                |> (rating => self.send(ModifiedRating(rating.rating)))
                 |> resolve
               )
             |> catch(_err =>
@@ -137,11 +139,12 @@ let make = (~training, _children) => {
             |> ignore
         )
       ));
-      | PostedRating(training) => ReasonReact.Update({globalState: Posted(training), rating})
+      | PostedRating(rating) => ReasonReact.Update({globalState: Posted(rating), rating})
+      | ModifiedRating(rating) => ReasonReact.Update({globalState: Posted(rating), rating})
       | FailedPostingRating => ReasonReact.Update({globalState: Error, rating})
           
   },
-  didMount: self => {
+  didMount: _self => {
     [%bs.debugger];
     ReasonReact.Update({globalState: Empty, rating: getRating(training)});
   },
@@ -185,6 +188,7 @@ let make = (~training, _children) => {
         </div>
       | Error => <div> (str("Impossible de poster le commentaire :( !")) </div>
       | Loading => <div> (str("Chargement de la page ...")) </div>
-      | Posted(_rating) => <div>(str("Posté :) !"))</div> 
+      | Posted(_rating) => <div> (str("Message posté :) !")) </div> 
+      | Modified(_rating) => <div> (str("Message modifié :) !")) </div>
     }
 };
