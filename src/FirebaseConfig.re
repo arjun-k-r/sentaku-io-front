@@ -9,3 +9,7 @@ let options =
    };
 
 let app = BsFirebase.ReasonFirebase.initializeApp(options);
+
+let auth = BsFirebase.ReasonFirebase.App.auth(app);
+
+
