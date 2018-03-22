@@ -1,5 +1,6 @@
 let options =
    {
+    "projectId": "sentaku-io",
 	"apiKey": "AIzaSyBB5CYadj9Laeb9DNXtg6DPRUVx4-kVzD4",
 	"authDomain": "sentaku-io.firebaseapp.com",
 	"databaseURL": "https://sentaku-io.firebaseio.com",

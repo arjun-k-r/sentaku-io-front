@@ -12,10 +12,10 @@
   "dependencies": {
     "@glennsl/bs-json": "^1.2.0",
     "bs-fetch": "^0.2.1",
-    "bs-firebase": "^0.1.0",
+    "bs-firebase": "git+https://github.com/splodingsocks/bs-firebase.git",
     "bs-firebase-admin": "git+https://github.com/avohq/bs-firebase-admin.git",
     "bs-firebase-functions": "git+https://github.com/avohq/bs-firebase-functions.git",
-    "bs-webapi": "^0.8.3",
+    "bs-webapi": "git+https://github.com/reasonml-community/bs-webapi-incubator.git",
     "bsb": "0.0.1",
     "dotenv": "^5.0.1",
     "firebase-admin": "^5.10.0",
