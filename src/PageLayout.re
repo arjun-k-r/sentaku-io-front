@@ -64,15 +64,15 @@ let make = _children => {
                             token: valueToken,
                             role: "admin"
                           })
-                        }, _self => Js.Promise.(
-                          ReasonReact.Router.push("/trainings")
-                        )
-                        |> resolve;
+                        }, ((_self) => Js.Promise.(
+                            ReasonReact.Router.push("/trainings")
+                          ))
+                        ) |> resolve
                         }
                         | None => Js.Promise.resolve(ReasonReact.NoUpdate)
                       }
                     }
-                  )
+                  ) |> ignore
                 )
             }
             | None => Js.log();
