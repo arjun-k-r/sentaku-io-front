@@ -13,4 +13,6 @@ let app = BsFirebase.ReasonFirebase.initializeApp(~options=options);
 let auth = BsFirebase.ReasonFirebase.App.auth(app);
 let db = BsFirebase.ReasonFirebase.App.database(app);
 
+let db = BsFirebase.ReasonFirebase.App.database(app);
+
 

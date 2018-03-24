@@ -54,6 +54,12 @@ let make = _children => {
             Js.log(self.state.userInfos);
             ReasonReact.Router.push("/trainings");
           })
+<<<<<<< Updated upstream
+=======
+        }, ((_self) =>
+            /*ReasonReact.Router.push("/trainings"))*/
+            Js.log("yo"))
+>>>>>>> Stashed changes
         )
     }
   },
@@ -67,10 +73,10 @@ let make = _children => {
                 Js.Promise.(User.getIdToken(value)
                 |> then_(
                     token => {
-                      [%bs.debugger];
                       let optToken = Js.Nullable.toOption(token);
                       switch optToken {
                       | Some(valueToken) => {
+<<<<<<< Updated upstream
                         [%bs.debugger];
                           BsFirebase.ReasonFirebase.Database.Reference.once(
                             BsFirebase.ReasonFirebase.Database.ref(FirebaseConfig.db, ~path="users/" ++ User.uid(value), ()),
@@ -88,6 +94,10 @@ let make = _children => {
                               }
                             }
                           );
+=======
+                          self.send(Login(value, valueToken))
+                          |> resolve
+>>>>>>> Stashed changes
                         }
                         | None => Js.Promise.resolve()
                       }
@@ -162,6 +172,7 @@ let make = _children => {
                        | ["login"] => <Login />
                        | ["disconnect"] => <Disconnect />
                        | ["register"] => <Register />
+                       | ["admin"] => <Administration />
                        | _ => <Trainings />
                        }
                      )

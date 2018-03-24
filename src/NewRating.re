@@ -60,7 +60,6 @@ module Input = {
 };
 
 let getRating : training => rating = training => {
-  [%bs.debugger];
   switch(List.filter(
     (rating) => rating.trainingId === training.id,
     Array.to_list(optArr(training.ratingOverview.ratings)))) {
@@ -145,7 +144,6 @@ let make = (~training, _children) => {
           
   },
   didMount: _self => {
-    [%bs.debugger];
     ReasonReact.Update({globalState: Empty, rating: getRating(training)});
   },
   render: self =>

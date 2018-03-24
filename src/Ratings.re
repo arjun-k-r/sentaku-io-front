@@ -10,7 +10,6 @@ let make = (~training, _children) => {
       (
         switch(training.ratingOverview.ratings) {
           | Some(ratings) => 
-            [%bs.debugger];
             if(Array.length(ratings) === 0) {
               str("Aucune note")
             } else {
@@ -25,7 +24,6 @@ let make = (~training, _children) => {
 
             }
           | None => {
-            [%bs.debugger];
             str("Aucune note");
           }
         }

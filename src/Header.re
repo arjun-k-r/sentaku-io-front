@@ -27,13 +27,11 @@ let make = (~userInfos: option(user), ~connection: connectionState, _children) =
               switch connection {
               | Logged => <li> (str(switch (userInfos) {
                   | Some(user) => {
-                    [%bs.debugger];
                     user.email ++ "(" ++ roleToString(user.role) ++ ")";
                   }
                   | None => "Erreur de login"
                 })) </li>
               | NotLogged => {
-                [%bs.debugger];
                 <span> </span>
               }
               }
@@ -44,7 +42,7 @@ let make = (~userInfos: option(user), ~connection: connectionState, _children) =
               | NotLogged => <li> <a href="/login"> (str("Se connecter")) </a> </li>
               }
             )
-            
+            <li> <a href="admin"> (str("Administration")) </a> </li>
           </ul>
           <ul className="side-nav" id="mobile-demo">
             <li> <a href="#badges"> (str("FAQ")) </a> </li>

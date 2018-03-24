@@ -135,7 +135,6 @@ let make = (~id, _children) => {
           (
             self =>
             {
-              [%bs.debugger];
               Js.Promise.(
                 Fetch.fetch(apiUrl ++ "trainings/"++ id)
                 |> then_(Fetch.Response.json)
