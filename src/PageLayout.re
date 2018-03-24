@@ -83,8 +83,8 @@ let make = _children => {
                      (
                        switch url.path {
                        | ["training", id] => <Training id />
-                       | ["login"] => <Login/>
-                       | ["register"] => <Register/>
+                       | ["login"] => <Login />
+                       | ["register"] => <Register />
                        | _ => <Trainings />
                        }
                      )
