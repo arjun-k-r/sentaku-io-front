@@ -3,6 +3,7 @@
  */
 open Model;
 open FirebaseConfig;
+open RoleDecode;
 open BsFirebase.ReasonFirebase.Auth;
 
 type page =
@@ -21,7 +22,7 @@ type state = {
 
 
 type action =
-  | Login(User.t, string)
+  | Login(User.t, string, role)
   | ShowIndex
   | ShowTraining(string)
   | ShowTrainings;
@@ -38,7 +39,7 @@ let make = _children => {
     | ShowIndex => ReasonReact.Update({...state, nowShowing: Index})
     | ShowTrainings => ReasonReact.Update({...state, nowShowing: Trainings})
     | ShowTraining(id) => ReasonReact.Update({...state, nowShowing: Training(id)})
-    | Login(user, token) => 
+    | Login(user, token, role) => 
       ReasonReact.UpdateWithSideEffects({...state, connection: Logged, 
           userInfos: Some({
             id: User.uid(user),
@@ -47,10 +48,12 @@ let make = _children => {
             | None => ""
             },
             token: token,
-            role: "admin"
+            role: role
           })
-        }, ((_self) =>
-            ReasonReact.Router.push("/trainings"))
+        }, ((self) => {
+            Js.log(self.state.userInfos);
+            ReasonReact.Router.push("/trainings");
+          })
         )
     }
   },
@@ -58,7 +61,6 @@ let make = _children => {
       onAuthStateChanged(FirebaseConfig.auth, 
         ~nextOrObserver = (user) => 
         {
-          [%bs.debugger];
           let opt = Js.Null.toOption(user);
           switch opt {
             | Some(value) => {
@@ -70,8 +72,22 @@ let make = _children => {
                       switch optToken {
                       | Some(valueToken) => {
                         [%bs.debugger];
-                          self.send(Login(value, valueToken))
-                          |> resolve
+                          BsFirebase.ReasonFirebase.Database.Reference.once(
+                            BsFirebase.ReasonFirebase.Database.ref(FirebaseConfig.db, ~path="users/" ++ User.uid(value), ()),
+                            ~eventType="value",
+                            ()
+                          )
+                          |> Js.Promise.then_(
+                            (roleInfos) => {
+                              [%bs.debugger];
+                              BsFirebase.ReasonFirebase.Database.DataSnapshot.val_(roleInfos)
+                              |> (role) => parseRole(role) |> getRole
+                              |> (role) => {
+                                Js.log(role);
+                                self.send(Login(value, valueToken, role)) |> resolve
+                              }
+                            }
+                          );
                         }
                         | None => Js.Promise.resolve()
                       }

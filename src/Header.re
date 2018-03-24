@@ -1,4 +1,5 @@
 open Model;
+open RoleDecode;
 
 let component = ReasonReact.statelessComponent("Header");
 
@@ -27,7 +28,7 @@ let make = (~userInfos: option(user), ~connection: connectionState, _children) =
               | Logged => <li> (str(switch (userInfos) {
                   | Some(user) => {
                     [%bs.debugger];
-                    user.email;
+                    user.email ++ "(" ++ roleToString(user.role) ++ ")";
                   }
                   | None => "Erreur de login"
                 })) </li>
