@@ -2,9 +2,9 @@ open Model;
 
 let component = ReasonReact.statelessComponent("Header");
 
-let make = _children => {
+let make = (~userInfos: option(user), ~connection: connectionState, _children) => {
   ...component,
-  render: _self =>
+  render: _self =>{
     <header>
       <nav>
         <div className="nav-wrapper">
@@ -22,6 +22,21 @@ let make = _children => {
             <li> <a href="#badges"> (str("FAQ")) </a> </li>
             <li> <a href="#collapsible"> (str("A propos")) </a> </li>
             <li> <a href="#mobile"> (str("Contact")) </a> </li>
+            (
+              switch connection {
+              | Logged => <li> (str(switch (userInfos) {
+                  | Some(user) => {
+                    [%bs.debugger];
+                    user.email;
+                  }
+                  | None => "Erreur de login"
+                })) </li>
+              | NotLogged => {
+                [%bs.debugger];
+                <span> </span>
+              }
+              }
+            )
             <li> <a href="/login"> (str("Se connecter")) </a> </li>
           </ul>
           <ul className="side-nav" id="mobile-demo">
@@ -32,4 +47,5 @@ let make = _children => {
         </div>
       </nav>
     </header>
+            }
 };

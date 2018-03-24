@@ -2,6 +2,8 @@
  * This component reprensents the main layout of the website. It contains the menu and its content changes depending on the url
  */
 open Model;
+open FirebaseConfig;
+open BsFirebase.ReasonFirebase.Auth;
 
 type page =
   | Index
@@ -11,7 +13,12 @@ type page =
   | Register;
 
 /* | NewTraining; */
-type state = {nowShowing: page};
+type state = {
+  nowShowing: page,
+  connection: connectionState,
+  userInfos: option(user)
+};
+
 
 type action =
   | ShowIndex
@@ -23,17 +30,66 @@ let component = ReasonReact.reducerComponent("PageLayout");
 
 let make = _children => {
   ...component,
-  initialState: () => {nowShowing: Index},
-  reducer: (action, _state) =>
+  initialState: () => {nowShowing: Index, connection: NotLogged, userInfos: None},
+  reducer: (action, state) => {
     switch action {
     /* router actions */
-    | ShowIndex => ReasonReact.Update({nowShowing: Index})
-    | ShowTrainings => ReasonReact.Update({nowShowing: Trainings})
-    | ShowTraining(id) => ReasonReact.Update({nowShowing: Training(id)})
+    | ShowIndex => ReasonReact.Update({...state, nowShowing: Index})
+    | ShowTrainings => ReasonReact.Update({...state, nowShowing: Trainings})
+    | ShowTraining(id) => ReasonReact.Update({...state, nowShowing: Training(id)})
+    }
+  },
+    didMount: ( {state} ) => {
+      onAuthStateChanged(FirebaseConfig.auth, 
+        ~nextOrObserver = (user) => 
+        {
+          [%bs.debugger];
+          let opt = Js.Null.toOption(user);
+          switch opt {
+            | Some(value) => {
+                Js.Promise.(User.getIdToken(value)
+                |> then_(
+                    token => {
+                      let optToken = Js.Nullable.toOption(token);
+                      switch optToken {
+                      | Some(valueToken) => {
+                        [%bs.debugger];
+                        ReasonReact.UpdateWithSideEffects({...state, connection: Logged, 
+                          userInfos: Some({
+                            id: User.uid(value),
+                            email: switch(Js.Nullable.toOption(User.email(value))) {
+                            | Some(value) => value
+                            | None => ""
+                            },
+                            token: valueToken,
+                            role: "admin"
+                          })
+                        }, _self => Js.Promise.(
+                          ReasonReact.Router.push("/trainings")
+                        )
+                        |> resolve;
+                        }
+                        | None => Js.Promise.resolve(ReasonReact.NoUpdate)
+                      }
+                    }
+                  )
+                )
+            }
+            | None => Js.log();
+          };
+          
+        },
+        ~error = (err) => Js.log(err),
+        ~completed = (u) => {
+          Js.log("completed");
+          Js.log(u);
+        }
+      );
+      ReasonReact.NoUpdate;
     },
-  render: _self =>
+  render: ({state}) =>
     <div>
-      <Header />
+      <Header userInfos=state.userInfos connection=state.connection/>
       <div className="row content">
         <div className="">
           <ul id="slide-out" className="col m2 side-nav fixed">
