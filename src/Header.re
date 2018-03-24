@@ -39,7 +39,7 @@ let make = (~userInfos: option(user), ~connection: connectionState, _children) =
             )
             (
               switch connection {
-              | Logged => <li> <a href="/disconnect"> (str("Se déconnecter")) </a> </li>
+              | Logged => <li> <a href="/disconnect"> (str("Se deconnecter")) </a> </li>
               | NotLogged => <li> <a href="/login"> (str("Se connecter")) </a> </li>
               }
             )
