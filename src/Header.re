@@ -37,7 +37,13 @@ let make = (~userInfos: option(user), ~connection: connectionState, _children) =
               }
               }
             )
-            <li> <a href="/login"> (str("Se connecter")) </a> </li>
+            (
+              switch connection {
+              | Logged => <li> <a href="/disconnect"> (str("Se déconnecter")) </a> </li>
+              | NotLogged => <li> <a href="/login"> (str("Se connecter")) </a> </li>
+              }
+            )
+            
           </ul>
           <ul className="side-nav" id="mobile-demo">
             <li> <a href="#badges"> (str("FAQ")) </a> </li>

@@ -21,6 +21,7 @@ type state = {
 
 
 type action =
+  | Login(User.t, string)
   | ShowIndex
   | ShowTraining(string)
   | ShowTrainings;
@@ -37,9 +38,23 @@ let make = _children => {
     | ShowIndex => ReasonReact.Update({...state, nowShowing: Index})
     | ShowTrainings => ReasonReact.Update({...state, nowShowing: Trainings})
     | ShowTraining(id) => ReasonReact.Update({...state, nowShowing: Training(id)})
+    | Login(user, token) => 
+      ReasonReact.UpdateWithSideEffects({...state, connection: Logged, 
+          userInfos: Some({
+            id: User.uid(user),
+            email: switch(Js.Nullable.toOption(User.email(user))) {
+            | Some(value) => value
+            | None => ""
+            },
+            token: token,
+            role: "admin"
+          })
+        }, ((_self) =>
+            ReasonReact.Router.push("/trainings"))
+        )
     }
   },
-    didMount: ( {state} ) => {
+    didMount: ( self ) => {
       onAuthStateChanged(FirebaseConfig.auth, 
         ~nextOrObserver = (user) => 
         {
@@ -50,26 +65,15 @@ let make = _children => {
                 Js.Promise.(User.getIdToken(value)
                 |> then_(
                     token => {
+                      [%bs.debugger];
                       let optToken = Js.Nullable.toOption(token);
                       switch optToken {
                       | Some(valueToken) => {
                         [%bs.debugger];
-                        ReasonReact.UpdateWithSideEffects({...state, connection: Logged, 
-                          userInfos: Some({
-                            id: User.uid(value),
-                            email: switch(Js.Nullable.toOption(User.email(value))) {
-                            | Some(value) => value
-                            | None => ""
-                            },
-                            token: valueToken,
-                            role: "admin"
-                          })
-                        }, ((_self) => Js.Promise.(
-                            ReasonReact.Router.push("/trainings")
-                          ))
-                        ) |> resolve
+                          self.send(Login(value, valueToken))
+                          |> resolve
                         }
-                        | None => Js.Promise.resolve(ReasonReact.NoUpdate)
+                        | None => Js.Promise.resolve()
                       }
                     }
                   ) |> ignore
@@ -140,6 +144,7 @@ let make = _children => {
                        switch url.path {
                        | ["training", id] => <Training id />
                        | ["login"] => <Login />
+                       | ["disconnect"] => <Disconnect />
                        | ["register"] => <Register />
                        | _ => <Trainings />
                        }
