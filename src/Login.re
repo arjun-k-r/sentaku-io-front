@@ -38,11 +38,9 @@ let make = (_children) => {
                     Js.Promise.(
                         signInAndRetrieveDataWithEmailAndPassword(auth,~email=mCredentials.email, ~password=mCredentials.password)
                         |> then_(
-                            (user) => 
+                            (_user) => 
                             {
-                                Js.log(user);
-                                
-                                
+                                Js.log("connected");
                             }
                             |> resolve
                             )

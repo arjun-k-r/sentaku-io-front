@@ -8,7 +8,7 @@ let options =
 	"messagingSenderId": "202892223524"
    };
 
-let app = BsFirebase.ReasonFirebase.initializeApp(options);
+let app = BsFirebase.ReasonFirebase.initializeApp(~options=options);
 
 let auth = BsFirebase.ReasonFirebase.App.auth(app);
 

@@ -41,6 +41,7 @@ type training = {
 type user = {
   id: string,
   email: string,
+  role: string,
   token: string
 };
 
@@ -51,6 +52,11 @@ type credential = {
   email: string,
   password: string
 };
+
+type connectionState =
+  | Logged
+  | NotLogged;
+
 
 let str = ReasonReact.stringToElement;
 
