@@ -156,7 +156,7 @@ let make = _children => {
                        switch url.path {
                        | ["training", id] => <Training id=id userInfos=state.userInfos connection=state.connection />
                        | ["login"] => <Login />
-					   | ["newtraining"] => <NewTraining />
+					            | ["newtraining"] => <NewTraining userInfos=state.userInfos connection=state.connection />
                        | ["disconnect"] => <Disconnect />
                        | ["register"] => <Register />
                        | _ => switch state.connection {

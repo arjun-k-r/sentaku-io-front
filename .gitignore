@@ -9,3 +9,4 @@ npm-debug.log
 .bsb.lock
 firebase-debug.log
 .env
+public/js/bundle.js
