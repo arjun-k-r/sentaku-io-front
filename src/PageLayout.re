@@ -20,7 +20,6 @@ type state = {
   userInfos: option(user)
 };
 
-
 type action =
   | Login(User.t, string, role)
   | ShowIndex
@@ -39,22 +38,20 @@ let make = _children => {
     | ShowIndex => ReasonReact.Update({...state, nowShowing: Index})
     | ShowTrainings => ReasonReact.Update({...state, nowShowing: Trainings})
     | ShowTraining(id) => ReasonReact.Update({...state, nowShowing: Training(id)})
-    | Login(user, token, role) => 
-      ReasonReact.UpdateWithSideEffects({...state, connection: Logged, 
+    | Login(user, token, role) => {
+      [%bs.debugger];
+      ReasonReact.Update({...state, connection: Logged, 
           userInfos: Some({
             id: User.uid(user),
             email: switch(Js.Nullable.toOption(User.email(user))) {
-            | Some(value) => value
+            | Some(email) => email
             | None => ""
             },
             token: token,
             role: role
           })
-        }, ((self) => {
-            Js.log(self.state.userInfos);
-            ReasonReact.Router.push("/trainings");
-          })
-        )
+        });
+      }
     }
   },
     didMount: ( self ) => {
@@ -67,11 +64,9 @@ let make = _children => {
                 Js.Promise.(User.getIdToken(value)
                 |> then_(
                     token => {
-                      [%bs.debugger];
                       let optToken = Js.Nullable.toOption(token);
                       switch optToken {
                       | Some(valueToken) => {
-                        [%bs.debugger];
                           BsFirebase.ReasonFirebase.Database.Reference.once(
                             BsFirebase.ReasonFirebase.Database.ref(FirebaseConfig.db, ~path="users/" ++ User.uid(value), ()),
                             ~eventType="value",
@@ -79,12 +74,12 @@ let make = _children => {
                           )
                           |> Js.Promise.then_(
                             (roleInfos) => {
-                              [%bs.debugger];
                               BsFirebase.ReasonFirebase.Database.DataSnapshot.val_(roleInfos)
                               |> (role) => parseRole(role) |> getRole
                               |> (role) => {
                                 Js.log(role);
-                                self.send(Login(value, valueToken, role)) |> resolve
+                                self.send(Login(value, valueToken, role));
+                                ReasonReact.Router.push("/trainings") |> resolve
                               }
                             }
                           );
@@ -107,7 +102,7 @@ let make = _children => {
       );
       ReasonReact.NoUpdate;
     },
-  render: ({state}) =>
+  render: ({ state }) =>
     <div>
       <Header userInfos=state.userInfos connection=state.connection/>
       <div className="row content">
@@ -158,11 +153,15 @@ let make = _children => {
                    <div>
                      (
                        switch url.path {
-                       | ["training", id] => <Training id />
+                       | ["training", id] => <Training id=id userInfos=state.userInfos connection=state.connection />
                        | ["login"] => <Login />
                        | ["disconnect"] => <Disconnect />
                        | ["register"] => <Register />
-                       | _ => <Trainings />
+                       | _ => switch state.connection {
+                          | Logged => <Trainings userInfos=state.userInfos connection=state.connection />
+                          | NotLogged => <div> (str("Connexion en cours")) </div>
+                       };
+                       
                        }
                      )
                    </div>
