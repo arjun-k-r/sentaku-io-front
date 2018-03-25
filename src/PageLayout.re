@@ -70,7 +70,6 @@ let make = _children => {
                       let optToken = Js.Nullable.toOption(token);
                       switch optToken {
                       | Some(valueToken) => {
-                        [%bs.debugger];
                           BsFirebase.ReasonFirebase.Database.Reference.once(
                             BsFirebase.ReasonFirebase.Database.ref(FirebaseConfig.db, ~path="users/" ++ User.uid(value), ()),
                             ~eventType="value",
@@ -78,13 +77,13 @@ let make = _children => {
                           )
                           |> Js.Promise.then_(
                             (roleInfos) => {
-                              [%bs.debugger];
                               BsFirebase.ReasonFirebase.Database.DataSnapshot.val_(roleInfos)
                               |> (role) => parseRole(role) |> getRole
-                              |> (role) => {
+                              /*|> (role) => {
                                 Js.log(role);
                                 self.send(Login(value, valueToken, role)) |> resolve
-                              }
+                              }*/
+                              |> (role) => Js.Promise.resolve()
                             }
                           );
                         }

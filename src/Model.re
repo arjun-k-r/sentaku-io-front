@@ -56,11 +56,6 @@ type user = {
   token: string
 };
 
-type minimalUser = {
-  email: string,
-  role: string
-};
-
 /**
  * To login
  */

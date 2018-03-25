@@ -7,6 +7,11 @@ let parseRole: Js.Json.t => roleInfo =
       role: json |> field("role", string),
     };
 
+    let parseRoles = json => {
+      Js.log(json);
+        json |> Json.Decode.array(parseRole) |> Array.map(role => role);
+    };
+
 let getRole: roleInfo => role =
   json =>
     switch (json.role) {
