@@ -71,4 +71,4 @@ type connectionState =
 
 let str = ReasonReact.stringToElement;
 
-let apiUrl = "https://sentaku-api-dev.herokuapp.com/api/v1/";
+let apiUrl = "https://sentaku-api-prod.herokuapp.com/api/v1/";
