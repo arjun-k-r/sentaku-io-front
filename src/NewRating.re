@@ -52,7 +52,6 @@ module Input = {
     render: ({state: text, reduce}) =>
       <input
         value=text
-        _type="text"
         placeholder=(placeHolder)
         onChange=(reduce((evt) => valueFromEvent(evt)))
       />
@@ -60,7 +59,6 @@ module Input = {
 };
 
 let getRating : training => rating = training => {
-  [%bs.debugger];
   switch(List.filter(
     (rating) => rating.trainingId === training.id,
     Array.to_list(optArr(training.ratingOverview.ratings)))) {
@@ -77,13 +75,13 @@ let getRating : training => rating = training => {
 
 let component = ReasonReact.reducerComponent("NewRating");
 
-let make = (~training, _children) => {
+let make = (~training, ~user, ~connection, _children) => {
   ...component,
   initialState: () => {
     globalState: Empty, 
     rating: {
       id: "",
-      ownerId: "f1b3f890-2616-11e8-b467-0ed5f89f718b",
+      ownerId: user.id,
       rate: 1,
       comment: "",
       trainingId: training.id
@@ -97,16 +95,12 @@ let make = (~training, _children) => {
       ReasonReact.UpdateWithSideEffects({globalState: Loading, rating}, 
         (
           self => Js.Promise.(
-            Fetch.fetchWithInit(apiUrl ++"trainings/" ++ training.id ++ "/notes", 
+            Fetch.fetchWithInit(apiUrl ++ "trainings/" ++ training.id ++ "/notes", 
               Fetch.RequestInit.make(~method_=Post, ~headers= Fetch.HeadersInit.makeWithArray([|("content-type", "application/json")|]),~body=Fetch.BodyInit.make @@ Js.Json.stringify(encodeRating(rating)), ()))
               |> then_(Fetch.Response.json)
               |> then_(json =>
                   json
                   |> RatingDecode.note
-                  /* |> (training => {
-                    Js.log(training);
-                    training
-                  }) */
                   |> (rating => self.send(PostedRating(rating.rating)))
                   |> resolve
                 )
@@ -126,10 +120,6 @@ let make = (~training, _children) => {
             |> then_(json =>
                 json
                 |> RatingDecode.note
-                /* |> (training => {
-                  Js.log(training);
-                  training
-                }) */
                 |> (rating => self.send(ModifiedRating(rating.rating)))
                 |> resolve
               )
@@ -145,7 +135,6 @@ let make = (~training, _children) => {
           
   },
   didMount: _self => {
-    [%bs.debugger];
     ReasonReact.Update({globalState: Empty, rating: getRating(training)});
   },
   render: self =>

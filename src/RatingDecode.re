@@ -3,7 +3,6 @@ open Model;
 type response = {rating};
 
 let parseRating = json => {
-  [%bs.debugger];
   Json.Decode.{
     id: json |> field("id", string),
     ownerId: json |> field("ownerId", string),

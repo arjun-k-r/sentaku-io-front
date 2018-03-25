@@ -5,6 +5,8 @@
  */
 open Model;
 open Utils;
+open FirebaseConfig;
+open BsFirebase.ReasonFirebase.Auth;
 open TrainingDecode;
 
 
@@ -81,7 +83,7 @@ module TrainingHeader = {
 */
 module TrainingFooter = {
   let component = ReasonReact.statelessComponent("TrainingFooter");
-  let make = (~training, _children) => {
+  let make = (~training, ~userInfos, ~connection, _children) => {
     ...component,
     render: _self =>
       <div className="col m12 card">
@@ -106,8 +108,14 @@ module TrainingFooter = {
           </ul>
         </div> */
         <Description training/>
-        <NewRating training/> 
-        <Ratings training/>
+        (
+          switch userInfos {
+            | Some(user) => <NewRating training user=user connection=connection/>
+            | None => <div> <h3>(str("Connectez vous pour pouvoir poster un message"))</h3></div>
+            }
+        )
+        
+        <Ratings training userInfos=userInfos connection=connection/>
       </div>
   };
 };
@@ -124,43 +132,47 @@ type action =
   | TrainingFetched(training)
   | TrainingFailedToFetch;
 let component = ReasonReact.reducerComponent("Training");
-let make = (~id, _children) => {
+let make = (~id, ~userInfos, ~connection, _children) => {
   ...component,
   initialState: _state => Loading,
   reducer: (action, _state) => 
     switch action {
       | TrainingFetch =>
-        ReasonReact.UpdateWithSideEffects(
-          Loading,
-          (
-            self =>
-            {
-              [%bs.debugger];
-              Js.Promise.(
-                Fetch.fetch(apiUrl ++ "trainings/"++ id)
-                |> then_(Fetch.Response.json)
-                |> then_(json =>
-                    json
-                    |> TrainingDecode.training
-                    /* |> (training => {
-                      Js.log(training);
-                      training
-                    }) */
-                    |> (training => self.send(TrainingFetched(training.training)))
-                    |> resolve
-                  )
-                |> catch(_err =>
-                    Js.Promise.resolve(self.send(TrainingFailedToFetch))
-                  )
-                |> ignore
-              )
-                  }
-          )
+      switch userInfos {
+      | Some(user) => 
+      ReasonReact.UpdateWithSideEffects(
+        Loading,
+        (
+          self =>
+          {
+            Js.Promise.(
+              Fetch.fetchWithInit(apiUrl ++ "trainings/"++ id, 
+                Fetch.RequestInit.make(~method_=Get, ~headers= Fetch.HeadersInit.makeWithArray([|("authorization", user.token)|]), ()))
+              |> then_(Fetch.Response.json)
+              |> then_(json =>
+                  json
+                  |> TrainingDecode.training
+                  |> (training => self.send(TrainingFetched(training.training)))
+                  |> resolve
+                )
+              |> catch(_err =>
+                  Js.Promise.resolve(self.send(TrainingFailedToFetch))
+                )
+              |> ignore
+            )
+          }
         )
+      )
+      | None => ReasonReact.NoUpdate
+      }
+        
       | TrainingFetched(training) => ReasonReact.Update(Loaded(training))
       | TrainingFailedToFetch => ReasonReact.Update(Error)
     },
   didMount: self => {
+    /* onAuthStateChanged(auth,  ~nextOrObserver = (_user) => {
+      self.send(TrainingFetch);
+    }, ~error= err => Js.log(err), ~completed= u => Js.log(u)); */
     self.send(TrainingFetch);
     ReasonReact.NoUpdate;
   },
@@ -171,8 +183,8 @@ let make = (~id, _children) => {
       | Loaded(training) =>
         <div className="row content">
           <div className="row">
-            <TrainingHeader training/>
-            <TrainingFooter training/>
+            <TrainingHeader training />
+            <TrainingFooter training userInfos=userInfos connection=connection/>
           </div>
         </div>
     }
