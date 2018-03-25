@@ -60,15 +60,16 @@ let make = _children => {
         {
           let opt = Js.Null.toOption(user);
           switch opt {
-            | Some(value) => {
-                Js.Promise.(User.getIdToken(value)
+            | Some(userValue) => {
+              Js.log(userValue);
+                Js.Promise.(User.getIdToken(userValue)
                 |> then_(
                     token => {
                       let optToken = Js.Nullable.toOption(token);
                       switch optToken {
                       | Some(valueToken) => {
                           BsFirebase.ReasonFirebase.Database.Reference.once(
-                            BsFirebase.ReasonFirebase.Database.ref(FirebaseConfig.db, ~path="users/" ++ User.uid(value), ()),
+                            BsFirebase.ReasonFirebase.Database.ref(FirebaseConfig.db, ~path="users/" ++ User.uid(userValue), ()),
                             ~eventType="value",
                             ()
                           )
@@ -78,7 +79,7 @@ let make = _children => {
                               |> (role) => parseRole(role) |> getRole
                               |> (role) => {
                                 Js.log(role);
-                                self.send(Login(value, valueToken, role));
+                                self.send(Login(userValue, valueToken, role));
                                 ReasonReact.Router.push("/trainings") |> resolve
                               }
                             }
