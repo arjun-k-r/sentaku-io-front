@@ -2,16 +2,27 @@
  * This component reprensents the main layout of the website. It contains the menu and its content changes depending on the url
  */
 open Model;
+open FirebaseConfig;
+open RoleDecode;
+open BsFirebase.ReasonFirebase.Auth;
 
 type page =
   | Index
   | Trainings
   | Training(string)
-  | NewTraining;
+  | NewTraining
+  | Login
+  | Register;
 
-type state = {nowShowing: page};
+  
+type state = {
+  nowShowing: page,
+  connection: connectionState,
+  userInfos: option(user)
+};
 
 type action =
+  | Login(User.t, string, role)
   | ShowIndex
   | ShowTraining(string)
   | ShowTrainings
@@ -21,18 +32,80 @@ let component = ReasonReact.reducerComponent("PageLayout");
 
 let make = _children => {
   ...component,
-  initialState: () => {nowShowing: Index},
-  reducer: (action, _state) =>
+  initialState: () => {nowShowing: Index, connection: NotLogged, userInfos: None},
+  reducer: (action, state) => {
     switch action {
     /* router actions */
-    | ShowIndex => ReasonReact.Update({nowShowing: Index})
-    | ShowTrainings => ReasonReact.Update({nowShowing: Trainings})
-    | ShowTraining(id) => ReasonReact.Update({nowShowing: Training(id)})
-    | ShowNewTraining => ReasonReact.Update({nowShowing : NewTraining})
+    | ShowIndex => ReasonReact.Update({...state, nowShowing: Index})
+    | ShowTrainings => ReasonReact.Update({...state, nowShowing: Trainings})
+    | ShowTraining(id) => ReasonReact.Update({...state, nowShowing: Training(id)})
+    | ShowNewTraining => ReasonReact.Update({... state, nowShowing : NewTraining})
+    | Login(user, token, role) => {
+      ReasonReact.Update({...state, connection: Logged, 
+          userInfos: Some({
+            id: User.uid(user),
+            email: switch(Js.Nullable.toOption(User.email(user))) {
+            | Some(email) => email
+            | None => ""
+            },
+            token: token,
+            role: role
+          })
+        });
+      }
+    }
+  },
+    didMount: ( self ) => {
+      onAuthStateChanged(FirebaseConfig.auth, 
+        ~nextOrObserver = (user) => 
+        {
+          let opt = Js.Null.toOption(user);
+          switch opt {
+            | Some(value) => {
+                Js.Promise.(User.getIdToken(value)
+                |> then_(
+                    token => {
+                      let optToken = Js.Nullable.toOption(token);
+                      switch optToken {
+                      | Some(valueToken) => {
+                          BsFirebase.ReasonFirebase.Database.Reference.once(
+                            BsFirebase.ReasonFirebase.Database.ref(FirebaseConfig.db, ~path="users/" ++ User.uid(value), ()),
+                            ~eventType="value",
+                            ()
+                          )
+                          |> Js.Promise.then_(
+                            (roleInfos) => {
+                              BsFirebase.ReasonFirebase.Database.DataSnapshot.val_(roleInfos)
+                              |> (role) => parseRole(role) |> getRole
+                              |> (role) => {
+                                Js.log(role);
+                                self.send(Login(value, valueToken, role));
+                                ReasonReact.Router.push("/trainings") |> resolve
+                              }
+                            }
+                          );
+                        }
+                        | None => Js.Promise.resolve()
+                      }
+                    }
+                  ) |> ignore
+                )
+            }
+            | None => Js.log();
+          };
+          
+        },
+        ~error = (err) => Js.log(err),
+        ~completed = (u) => {
+          Js.log("completed");
+          Js.log(u);
+        }
+      );
+      ReasonReact.NoUpdate;
     },
-  render: _self =>
+  render: ({ state }) =>
     <div>
-      <Header />
+      <Header userInfos=state.userInfos connection=state.connection/>
       <div className="row content">
         <div className="">
           <ul id="slide-out" className="col m2 side-nav fixed">
@@ -81,9 +154,16 @@ let make = _children => {
                    <div>
                      (
                        switch url.path {
-                       | ["training", id] => <Training id />
-                       | ["newtraining"] => <NewTraining />
-                       | _ => <Trainings />
+                       | ["training", id] => <Training id=id userInfos=state.userInfos connection=state.connection />
+                       | ["login"] => <Login />
+					   | ["newtraining"] => <NewTraining />
+                       | ["disconnect"] => <Disconnect />
+                       | ["register"] => <Register />
+                       | _ => switch state.connection {
+                          | Logged => <Trainings userInfos=state.userInfos connection=state.connection />
+                          | NotLogged => <div> (str("Connexion en cours")) </div>
+                       };
+                       
                        }
                      )
                    </div>

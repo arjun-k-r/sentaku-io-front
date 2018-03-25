@@ -33,6 +33,12 @@ switch opt {
 | None => ""
 };
 
+let optArr = opt =>
+switch opt {
+| Some(value) => value
+| None => [||]
+};
+
 
 let optFloatStr = opt=>
 switch opt {

@@ -2,6 +2,17 @@
  * Here you will find all the model objects
  */
 
+type role = 
+  | Admin
+  | Evaluator
+  | Staff
+  | Prospect;
+
+type roleInfo = {
+  email: string,
+  role: string
+};
+
 /**
  * This type defines a training rating (note)
  */
@@ -35,6 +46,29 @@ type training = {
   ratingOverview: ratingOverview
 };
 
+/**
+ * When logged in
+ */
+type user = {
+  id: string,
+  email: string,
+  role: role,
+  token: string
+};
+
+/**
+ * To login
+ */
+type credential = {
+  email: string,
+  password: string
+};
+
+type connectionState =
+  | Logged
+  | NotLogged;
+
+
 let str = ReasonReact.stringToElement;
 
-let apiUrl = "https://sentaku-api-prod.herokuapp.com/api/v1/";
+let apiUrl = "https://sentaku-api-dev.herokuapp.com/api/v1/";

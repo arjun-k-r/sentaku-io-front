@@ -6,9 +6,13 @@
   },
   "refmt": 3,
   "bs-dependencies": ["reason-react",
+    "@glennsl/bs-json",
     "bs-fetch",
     "bs-webapi",
-    "@glennsl/bs-json"
+    "bs-firebase-admin",
+    "bs-firebase-functions",
+    "bs-firebase"
   ],
+  "suffix": ".bs.js",
   "sources": "src"
 }

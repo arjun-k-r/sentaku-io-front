@@ -1,10 +1,11 @@
 open Model;
+open RoleDecode;
 
 let component = ReasonReact.statelessComponent("Header");
 
-let make = _children => {
+let make = (~userInfos: option(user), ~connection: connectionState, _children) => {
   ...component,
-  render: _self =>
+  render: _self =>{
     <header>
       <nav>
         <div className="nav-wrapper">
@@ -22,6 +23,26 @@ let make = _children => {
             <li> <a href="#badges"> (str("FAQ")) </a> </li>
             <li> <a href="#collapsible"> (str("A propos")) </a> </li>
             <li> <a href="#mobile"> (str("Contact")) </a> </li>
+            (
+              switch connection {
+              | Logged => <li> (str(switch (userInfos) {
+                  | Some(user) => {
+                    user.email ++ "(" ++ roleToString(user.role) ++ ")";
+                  }
+                  | None => "Erreur de login"
+                })) </li>
+              | NotLogged => {
+                <span> </span>
+              }
+              }
+            )
+            (
+              switch connection {
+              | Logged => <li> <a href="/disconnect"> (str("Se deconnecter")) </a> </li>
+              | NotLogged => <li> <a href="/login"> (str("Se connecter")) </a> </li>
+              }
+            )
+            
           </ul>
           <ul className="side-nav" id="mobile-demo">
             <li> <a href="#badges"> (str("FAQ")) </a> </li>
@@ -31,4 +52,5 @@ let make = _children => {
         </div>
       </nav>
     </header>
+            }
 };

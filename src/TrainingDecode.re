@@ -38,7 +38,6 @@ let parseTraining = json =>
 
 
 let training = json => {
-  [%bs.debugger];
   Json.Decode.{training: json |> field("training", parseTraining)};
 };
 
