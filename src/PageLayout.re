@@ -59,9 +59,9 @@ let make = _children => {
         ~nextOrObserver = (user) => 
         {
           let opt = Js.Null.toOption(user);
+          Js.log(opt);
           switch opt {
             | Some(userValue) => {
-              Js.log(userValue);
                 Js.Promise.(User.getIdToken(userValue)
                 |> then_(
                     token => {
