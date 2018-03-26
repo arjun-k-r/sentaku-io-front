@@ -4,11 +4,21 @@ const path = require('path');
 const fs = require('fs');
 const compression = require('compression');
 const helmet = require('helmet');
+const http = require('http');
+var https = require('https');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 // variable ci dessous à adapter à votre projet
 const DIST = path.join(__dirname, '..', 'public');
+
+const key = fs.readFileSync(__dirname + '/encrypt/server.key');
+const cert = fs.readFileSync(__dirname + '/encrypt/server.crt');
+
+const options = {
+    key: key,
+    cert: cert
+  };
 
 app.enable('trust proxy');
 
@@ -33,6 +43,6 @@ app.get('*', (req, res) =>
   fs.createReadStream(path.join(DIST, 'index.html')).pipe(res)
 );
 
-app.listen(PORT, () =>
+https.createServer(options, app).listen(PORT, () =>
   process.stdout.write(`cutii-desktop server started on port ${PORT}\n`)
 );
