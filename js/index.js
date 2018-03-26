@@ -6,7 +6,7 @@ const compression = require('compression');
 const helmet = require('helmet');
 
 const app = express();
-const PORT = process.env.PORT || 3998;
+const PORT = process.env.PORT || 5000;
 // variable ci dessous à adapter à votre projet
 const DIST = path.join(__dirname, '..', 'public');
 
