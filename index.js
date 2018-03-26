@@ -6,23 +6,32 @@ const compression = require('compression');
 const helmet = require('helmet');
 const http = require('http');
 var https = require('https');
+var forceSsl = require('express-force-ssl');
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 // variable ci dessous à adapter à votre projet
-const DIST = path.join(__dirname, '..', 'public');
+const DIST = path.join(__dirname, 'public');
+console.log(DIST);
 
-const key = fs.readFileSync(__dirname + '/encrypt/server.key');
-const cert = fs.readFileSync(__dirname + '/encrypt/server.crt');
+// const key = fs.readFileSync(__dirname + '/js/encrypt/server.key');
+// const cert = fs.readFileSync(__dirname + '/js/encrypt/server.crt');
+// const key = fs.readFileSync(__dirname + '/rootCA.key');
+// const cert= fs.readFileSync(__dirname + '/rootCA.pem');
 
-const options = {
-    key: key,
-    cert: cert
-  };
+
+// const options = {
+//     key: key,
+//     cert: cert,
+//     requestCert: false,
+//     rejectUnauthorized: false
+//   };
 
 app.enable('trust proxy');
 
 app.use(compression());
+app.use(forceSsl);
 app.disable('x-powered-by');
 app.use(
   helmet.hsts({
@@ -34,15 +43,17 @@ app.use(
   })
 );
 
-app.get('*', (req, res, next) => {
-  return res.redirect(308, 'https://' + req.headers.host + req.originalUrl);
-});
+// J'enlève la partie ci dessous car j'ai activé le package force ssl plus haut
+
+// app.get('*', (req, res, next) => {
+//   return res.redirect(308, 'https://' + req.headers.host + req.originalUrl);
+// });
 app.use(express.static(DIST));
 
-app.get('*', (req, res) =>
+app.get('*', (req, res) =>{
   fs.createReadStream(path.join(DIST, 'index.html')).pipe(res)
-);
+});
 
-https.createServer(options, app).listen(PORT, () =>
+https.createServer(app).listen(PORT, () =>
   process.stdout.write(`cutii-desktop server started on port ${PORT}\n`)
 );
